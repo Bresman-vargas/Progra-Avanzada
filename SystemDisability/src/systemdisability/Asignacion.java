@@ -10,7 +10,7 @@ public class Asignacion {
     private Beneficiario beneficiario;
     private Servicio servicio;
     private String fecha;
-    private String hora;
+    private String hora; 
 
     public Asignacion(Beneficiario beneficiario, Servicio servicio, String fecha, String hora) {
         this.id = Utilidades.generateUniqueId();

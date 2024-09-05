@@ -182,7 +182,7 @@ public class MenuBeneficiarios {
         System.out.println("===============================================");
         System.out.println("Presione Enter para continuar...");
         scanner.nextLine(); // Esperar que el usuario presione Enter
-    }
+    } 
     
 
     private static void eliminarBeneficiario(Scanner scanner) {

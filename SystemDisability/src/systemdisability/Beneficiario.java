@@ -12,7 +12,7 @@ public class Beneficiario {
     private String nombre;
     private int edad;
     private List<String> discapacidades;
-    private String detallesAdicionales;
+    private String detallesAdicionales; 
 
     // Constructor con discapacidades múltiples
     public Beneficiario(String nombre, int edad, List<String> discapacidades, String detallesAdicionales) {

@@ -14,7 +14,7 @@ public class Servicio {
         this.nombre = nombre;
         this.descripcion = descripcion;
     }
-
+ 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

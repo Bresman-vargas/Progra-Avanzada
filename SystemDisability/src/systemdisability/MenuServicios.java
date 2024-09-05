@@ -82,7 +82,7 @@ public class MenuServicios {
                 System.out.println("La descripción del servicio no puede quedar en blanco. Intente de nuevo.");
             }
         }
-    
+     
         // Crear y agregar el nuevo servicio
         Servicio nuevoServicio = new Servicio(nombre, descripcion);
         ServicioManager.agregarServicio(nuevoServicio);

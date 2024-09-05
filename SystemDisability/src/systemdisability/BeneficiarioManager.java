@@ -13,7 +13,7 @@ public class BeneficiarioManager {
     public static void agregarBeneficiario(Beneficiario beneficiario) {
         if (beneficiarios.containsKey(beneficiario.getId())) {
             System.out.println("El beneficiario con el ID " + beneficiario.getId() + " ya existe.");
-        } else {
+        } else { 
             beneficiarios.put(beneficiario.getId(), beneficiario);
         }
     }

@@ -98,7 +98,7 @@ public class ServicioBeneficiariosManager {
                     System.out.printf("| %-18s | %-28s | %-28s |%n",
                             beneficiarioId,
                             "Servicio no disponible",
-                            "Detalles no disponibles");
+                            "Detalles no disponibles"); 
                 }
             }
 

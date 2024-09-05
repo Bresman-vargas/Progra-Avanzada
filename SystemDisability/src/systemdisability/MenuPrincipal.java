@@ -52,7 +52,7 @@ public class MenuPrincipal {
                 case 2:
                     Utilidades.limpiarPantalla();
                     MenuServicios.mostrarMenu(scanner);
-                    break;
+                    break; 
                 case 3:
                     // Llamar al método para el seguimiento de impacto
                     break;
