@@ -51,10 +51,10 @@ public class BeneficiarioManager {
         System.out.println("===============================================");
         System.out.println("            LISTA DE BENEFICIARIOS            ");
         System.out.println("===============================================");
-        System.out.printf("| %-15s | %-20s | %-5s | %-25s | %-30s |%n", "ID", "Nombre", "Edad", "Discapacidades", "Detalles");
+        System.out.printf("| %-15s | %-20s | %-5s | %-40s | %-30s |%n", "ID", "Nombre", "Edad", "Discapacidades", "Detalles");
         System.out.println("-------------------------------------------------------------------------------");
         for (Beneficiario beneficiario : beneficiarios.values()) {
-            System.out.printf("| %-15s | %-20s | %-5d | %-25s | %-30s |%n",
+            System.out.printf("| %-15s | %-20s | %-5d | %-40s | %-30s |%n",
                     beneficiario.getId(),
                     beneficiario.getNombre(),
                     beneficiario.getEdad(),
@@ -66,9 +66,13 @@ public class BeneficiarioManager {
 
     // Método para inicializar la lista de beneficiarios con datos de prueba
     public static void inicializarDatosBE() {
-        agregarBeneficiario(new Beneficiario("Juan Pérez", 30, List.of("Ceguera"), "Ninguno"));
-        agregarBeneficiario(new Beneficiario("Ana Gómez", 25, List.of("Parálisis Cerebral"), "Requiere silla de ruedas"));
-        agregarBeneficiario(new Beneficiario("Luis Rodríguez", 40, List.of("Sordera"), "Uso de audífonos"));
+        // Agregar beneficiarios con múltiples discapacidades
+    BeneficiarioManager.agregarBeneficiario(new Beneficiario("Sara Morales", 27, List.of("Ceguera", "Dislexia"), "Requiere asistencia en la lectura y navegación diaria"));
+    BeneficiarioManager.agregarBeneficiario(new Beneficiario("Eduardo González", 34, List.of("Sordera", "Parálisis Cerebral"), "Necesita apoyo en la comunicación y movilidad"));
+    BeneficiarioManager.agregarBeneficiario(new Beneficiario("Mónica López", 29, List.of("Autismo", "Epilepsia"), "Requiere terapia especializada y manejo de convulsiones"));
+    BeneficiarioManager.agregarBeneficiario(new Beneficiario("Jessica Ramírez", 32, List.of("Esquizofrenia", "Dislexia"), "Necesita apoyo en la salud mental y educación"));
+    BeneficiarioManager.agregarBeneficiario(new Beneficiario("Beatriz Soto", 45, List.of("Esclerosis múltiple", "Distrofia muscular"), "Necesita atención médica constante y adaptaciones para la movilidad"));
+
         // Puedes agregar más beneficiarios de prueba aquí con IDs únicos
     }
 }

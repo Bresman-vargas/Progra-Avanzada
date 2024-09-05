@@ -1,5 +1,9 @@
 package systemdisability;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -7,30 +11,44 @@ public class ServicioBeneficiariosManager {
     // Reutiliza la misma instancia de Scanner
     private static Scanner scanner = new Scanner(System.in);
 
-    // Mapa que asocia el ID del beneficiario con el ID del servicio asignado
-    private static final Map<String, String> asignaciones = new HashMap<>();
+    // Mapa que asocia el ID del beneficiario con una lista de IDs de servicios asignados
+    private static final Map<String, List<String>> asignaciones = new HashMap<>();
 
     // Método para asignar un servicio a un beneficiario
     public static void asignarServicio(String beneficiarioId, String servicioId) {
-        if (asignaciones.containsKey(beneficiarioId)) {
-            System.out.println("El beneficiario con ID " + beneficiarioId + " ya tiene un servicio asignado.");
+        // Obtiene la lista actual de servicios asignados para el beneficiario
+        List<String> servicios = asignaciones.get(beneficiarioId);
+        
+        if (servicios == null) {
+            // Si no hay servicios asignados, crea una nueva lista
+            servicios = new ArrayList<>();
+            asignaciones.put(beneficiarioId, servicios);
+        }
+        
+        if (servicios.contains(servicioId)) {
+            System.out.println("El servicio con ID " + servicioId + " ya está asignado al beneficiario con ID " + beneficiarioId + ".");
         } else {
-            asignaciones.put(beneficiarioId, servicioId);
+            servicios.add(servicioId);
             System.out.println("Servicio asignado exitosamente.");
         }
     }
 
-    // Método para obtener el servicio asignado a un beneficiario
-    public static String obtenerServicioAsignado(String beneficiarioId) {
-        return asignaciones.get(beneficiarioId);
+    // Método para obtener la lista de servicios asignados a un beneficiario
+    public static List<String> obtenerServiciosAsignados(String beneficiarioId) {
+        return asignaciones.getOrDefault(beneficiarioId, Collections.emptyList());
     }
 
-    // Método para eliminar la asignación de un servicio a un beneficiario
-    public static void eliminarAsignacion(String beneficiarioId) {
-        if (asignaciones.remove(beneficiarioId) != null) {
+    // Método para eliminar un servicio específico asignado a un beneficiario
+    public static void eliminarAsignacion(String beneficiarioId, String servicioId) {
+        List<String> servicios = asignaciones.get(beneficiarioId);
+        
+        if (servicios != null && servicios.remove(servicioId)) {
+            if (servicios.isEmpty()) {
+                asignaciones.remove(beneficiarioId); // Elimina al beneficiario si no tiene más servicios
+            }
             System.out.println("Asignación eliminada exitosamente.");
         } else {
-            System.out.println("No se encontró una asignación para el beneficiario con ID " + beneficiarioId + ".");
+            System.out.println("No se encontró el servicio con ID " + servicioId + " para el beneficiario con ID " + beneficiarioId + ".");
         }
     }
 
@@ -38,35 +56,54 @@ public class ServicioBeneficiariosManager {
     public static void mostrarServiciosAsignados() {
         Utilidades.limpiarPantalla();
         System.out.println("===============================================");
-        System.out.println("         SERVICIOS ASIGNADOS A BENEFICIARIOS  ");
+        System.out.println("           Ver Servicios Asignados            ");
         System.out.println("===============================================");
 
+        // Obtener asignaciones
+        Map<String, List<String>> asignaciones = ServicioBeneficiariosManager.obtenerAsignaciones();
+
         if (asignaciones.isEmpty()) {
-            System.out.println("No hay servicios asignados.");
+            System.out.println("No hay servicios asignados a beneficiarios.");
         } else {
             // Encabezado de la tabla
-            System.out.printf("+--------------+------------------------------+%n");
-            System.out.printf("| Beneficiario | Servicio                     |%n");
-            System.out.printf("+--------------+------------------------------+%n");
+            System.out.printf("| %-18s | %-28s | %-28s |%n", "Beneficiario", "Servicio", "Detalles");
+            System.out.printf("+------------------------------------------------------------------------------------%n");
 
-            // Filas de la tabla
-            for (Map.Entry<String, String> entry : asignaciones.entrySet()) {
+            // Imprimir detalles de las asignaciones
+            for (Map.Entry<String, List<String>> entry : asignaciones.entrySet()) {
                 String beneficiarioId = entry.getKey();
-                String servicioId = entry.getValue();
+                List<String> serviciosIds = entry.getValue();
 
-                // Obtener detalles del beneficiario y del servicio
-                Beneficiario beneficiario = BeneficiarioManager.obtenerBeneficiarioPorId(servicioId);
-                Servicio servicio = ServicioManager.obtenerServicioPorCodigo(servicioId);
+                // Obtener detalles del beneficiario
+                Beneficiario beneficiario = BeneficiarioManager.obtenerBeneficiarioPorId(beneficiarioId);
 
-                if (beneficiario != null && servicio != null) {
-                    System.out.printf("| %-12s | %-28s |%n", beneficiario.getNombre(), servicio.getNombre());
+                if (beneficiario != null) {
+                    for (String servicioId : serviciosIds) {
+                        // Obtener detalles del servicio
+                        Servicio servicio = ServicioManager.obtenerServicioPorCodigo(servicioId);
+
+                        if (servicio != null) {
+                            System.out.printf("| %-18s | %-28s | %-28s |%n",
+                                    beneficiario.getNombre(),
+                                    servicio.getNombre(),
+                                    servicio.getDescripcion());
+                        } else {
+                            System.out.printf("| %-18s | %-28s | %-28s |%n",
+                                    beneficiarioId,
+                                    "Servicio no disponible",
+                                    "Detalles no disponibles");
+                        }
+                    }
                 } else {
-                    System.out.printf("| %-12s | %-28s |%n", beneficiarioId, "Servicio no disponible");
+                    System.out.printf("| %-18s | %-28s | %-28s |%n",
+                            beneficiarioId,
+                            "Servicio no disponible",
+                            "Detalles no disponibles");
                 }
             }
 
             // Línea final de la tabla
-            System.out.printf("+--------------+------------------------------+%n");
+            System.out.printf("+------------------------------------------------------------------------------------%n");
         }
 
         System.out.println("===============================================");
@@ -74,7 +111,8 @@ public class ServicioBeneficiariosManager {
         scanner.nextLine(); // Esperar que el usuario presione Enter
     }
     
-    public static Map<String, String> obtenerAsignaciones() {
-    return new HashMap<>(asignaciones); // Devuelve una copia del mapa de asignaciones
+    // Método para obtener una copia del mapa de asignaciones
+    public static Map<String, List<String>> obtenerAsignaciones() {
+        return new HashMap<>(asignaciones); // Devuelve una copia del mapa de asignaciones
     }
 }

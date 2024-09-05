@@ -1,5 +1,4 @@
 package systemdisability;
-import java.util.Map;
 import java.util.Scanner;
 /**
  * @author bresm
@@ -209,52 +208,9 @@ public class MenuServicios {
 
 
     private static void verServiciosAsignados() {
-    Utilidades.limpiarPantalla();
-    System.out.println("===============================================");
-    System.out.println("           Ver Servicios Asignados            ");
-    System.out.println("===============================================");
-
-    // Obtener asignaciones
-    Map<String, String> asignaciones = ServicioBeneficiariosManager.obtenerAsignaciones();
-
-    if (asignaciones.isEmpty()) {
-        System.out.println("No hay servicios asignados a beneficiarios.");
-    } else {
-        // Encabezado de la tabla
-        System.out.printf("+--------------+------------------------------+------------------------------+%n");
-        System.out.printf("| Beneficiario | Servicio                     | Detalles                     |%n");
-        System.out.printf("+--------------+------------------------------+------------------------------+%n");
-
-        // Imprimir detalles de las asignaciones
-        for (Map.Entry<String, String> entry : asignaciones.entrySet()) {
-            String beneficiarioId = entry.getKey();
-            String servicioId = entry.getValue();
-
-            // Obtener detalles del beneficiario y del servicio
-            Beneficiario beneficiario = BeneficiarioManager.obtenerBeneficiarioPorId(beneficiarioId);
-            Servicio servicio = ServicioManager.obtenerServicioPorCodigo(servicioId);
-
-            if (beneficiario != null && servicio != null) {
-                System.out.printf("| %-12s | %-28s | %-28s |%n",
-                        beneficiario.getNombre(),
-                        servicio.getNombre(),
-                        servicio.getDescripcion());
-            } else {
-                System.out.printf("| %-12s | %-28s | %-28s |%n",
-                        beneficiarioId,
-                        "Servicio no disponible",
-                        "Detalles no disponibles");
-            }
-        }
-
-        // Línea final de la tabla
-        System.out.printf("+--------------+------------------------------+------------------------------+%n");
+        ServicioBeneficiariosManager.mostrarServiciosAsignados();
     }
 
-    System.out.println("===============================================");
-    System.out.println("Presione Enter para continuar...");
-    scanner.nextLine(); // Esperar que el usuario presione Enter
-    }
 
     private static void eliminarServicio() {
     // Mostrar todos los servicios disponibles

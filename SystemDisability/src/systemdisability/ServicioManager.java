@@ -58,10 +58,13 @@ public class ServicioManager {
     }
 
     public static void inicializarDatosSE() {
-    agregarServicio(new Servicio("Fisioterapia", "Sesiones de fisioterapia para mejorar la movilidad"));
-    agregarServicio(new Servicio("Educación Especial", "Clases adaptadas para personas con discapacidades"));
-    agregarServicio(new Servicio("Inserción Laboral", "Programa de inserción laboral para personas con discapacidades"));
-    // Puedes agregar más servicios de prueba aquí con IDs únicos
-}
+    // Agregar servicios con descripciones detalladas
+    ServicioManager.agregarServicio(new Servicio("Fisioterapia", "Sesiones de fisioterapia para mejorar la movilidad"));
+    ServicioManager.agregarServicio(new Servicio("Educación Especial", "Clases adaptadas para personas con discapacidades"));
+    ServicioManager.agregarServicio(new Servicio("Inserción Laboral", "Programa de inserción laboral para personas con discapacidades"));
+    ServicioManager.agregarServicio(new Servicio("Terapia Ocupacional", "Intervenciones para ayudar a las personas a realizar sus actividades diarias"));
+    ServicioManager.agregarServicio(new Servicio("Asesoría Psicológica", "Apoyo psicológico para gestionar el impacto emocional de las discapacidades"));
 
+    // Puedes agregar más servicios de prueba aquí con IDs únicos
+    }
 }
