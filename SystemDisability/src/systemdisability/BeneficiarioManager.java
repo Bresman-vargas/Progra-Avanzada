@@ -1,5 +1,7 @@
 package systemdisability;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BeneficiarioManager {
@@ -49,14 +51,14 @@ public class BeneficiarioManager {
         System.out.println("===============================================");
         System.out.println("            LISTA DE BENEFICIARIOS            ");
         System.out.println("===============================================");
-        System.out.printf("| %-15s | %-20s | %-5s | %-15s | %-30s |%n", "ID", "Nombre", "Edad", "Discapacidad", "Detalles");
+        System.out.printf("| %-15s | %-20s | %-5s | %-25s | %-30s |%n", "ID", "Nombre", "Edad", "Discapacidades", "Detalles");
         System.out.println("-------------------------------------------------------------------------------");
         for (Beneficiario beneficiario : beneficiarios.values()) {
-            System.out.printf("| %-15s | %-20s | %-5d | %-15s | %-30s |%n",
+            System.out.printf("| %-15s | %-20s | %-5d | %-25s | %-30s |%n",
                     beneficiario.getId(),
                     beneficiario.getNombre(),
                     beneficiario.getEdad(),
-                    beneficiario.getDiscapacidad(),
+                    String.join(", ", beneficiario.getDiscapacidades()), // Cambiado a mostrar múltiples discapacidades
                     beneficiario.getDetallesAdicionales());
         }
         System.out.println("===============================================");
@@ -64,9 +66,10 @@ public class BeneficiarioManager {
 
     // Método para inicializar la lista de beneficiarios con datos de prueba
     public static void inicializarDatosBE() {
-        agregarBeneficiario(new Beneficiario("Juan Pérez", 30, "Ceguera", "Ninguno"));
-        agregarBeneficiario(new Beneficiario("Ana Gómez", 25, "Parálisis Cerebral", "Requiere silla de ruedas"));
-        agregarBeneficiario(new Beneficiario("Luis Rodríguez", 40, "Sordera", "Uso de audífonos"));
+        agregarBeneficiario(new Beneficiario("Juan Pérez", 30, List.of("Ceguera"), "Ninguno"));
+        agregarBeneficiario(new Beneficiario("Ana Gómez", 25, List.of("Parálisis Cerebral"), "Requiere silla de ruedas"));
+        agregarBeneficiario(new Beneficiario("Luis Rodríguez", 40, List.of("Sordera"), "Uso de audífonos"));
         // Puedes agregar más beneficiarios de prueba aquí con IDs únicos
     }
 }
+

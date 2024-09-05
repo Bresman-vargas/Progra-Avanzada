@@ -1,13 +1,11 @@
 package systemdisability;
 
-import java.util.ArrayList;
+
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class MenuBeneficiarios {
-
-    private static final List<Beneficiario> beneficiarios = new ArrayList<>();
 
     public static void mostrarMenu(Scanner scanner) {
         while (true) {
@@ -62,10 +60,16 @@ public class MenuBeneficiarios {
         System.out.println("===============================================");
         System.out.println("Añadir Nuevo Beneficiario");
         System.out.println("===============================================");
-
-        System.out.print("Ingrese el nombre completo: ");
-        String nombre = scanner.nextLine();
-
+    
+        String nombre = "";
+        while (nombre.isBlank()) {
+            System.out.print("Ingrese el nombre completo: ");
+            nombre = scanner.nextLine();
+            if (nombre.isBlank()) {
+                System.out.println("El nombre no puede quedar en blanco. Intente de nuevo.");
+            }
+        }
+    
         int edad = -1; // Inicializar con un valor no válido para entrar en el bucle
         while (edad < 0) {
             System.out.print("Ingrese la edad: ");
@@ -80,87 +84,106 @@ public class MenuBeneficiarios {
                 System.out.println("Edad no válida. Debe ingresar un número entero.");
             }
         }
-
-        System.out.print("Ingrese el tipo de discapacidad: ");
-        String discapacidad = scanner.nextLine();
-
+    
+        System.out.print("Ingrese el/las discapacidad/es (separados por comas): ");
+        String discapacidadesInput = scanner.nextLine();
+        List<String> discapacidades = List.of(discapacidadesInput.split("\\s*,\\s*"));
+    
         System.out.print("Ingrese detalles adicionales (opcional): ");
         String detalles = scanner.nextLine();
-
-        Beneficiario beneficiario = new Beneficiario(nombre, edad, discapacidad, detalles);
-        beneficiarios.add(beneficiario);
-
+    
+        Beneficiario beneficiario = new Beneficiario(nombre, edad, discapacidades, detalles);
+        BeneficiarioManager.agregarBeneficiario(beneficiario);
+    
         System.out.println("\n-----------------------------------------------");
         System.out.println("Nuevo beneficiario añadido exitosamente.");
         System.out.println("Presione Enter para continuar...");
         scanner.nextLine();  // Esperar que el usuario presione Enter
     }
+    
 
     private static void editarBeneficiario(Scanner scanner) {
         BeneficiarioManager.mostrarBeneficiariosEnTabla();
         System.out.println("===============================================");
         System.out.println("   EDITAR INFORMACIÓN DE BENEFICIARIO");
         System.out.println("===============================================");
-
+    
         System.out.print("Ingrese el ID del beneficiario a editar: ");
         String id = scanner.nextLine();
-
+    
         Beneficiario beneficiario = BeneficiarioManager.obtenerBeneficiarioPorId(id);
-
+    
         if (beneficiario == null) {
             System.out.println("No se encontró un beneficiario con ese ID.");
             return;
         }
         
         Utilidades.limpiarPantalla();
-
+    
         System.out.println("===============================================");
         System.out.println("            INFORMACIÓN DEL BENEFICIARIO");
         System.out.println("===============================================");
         System.out.printf("%-15s: %s%n", "ID", beneficiario.getId());
         System.out.printf("%-15s: %s%n", "Nombre", beneficiario.getNombre());
         System.out.printf("%-15s: %d%n", "Edad", beneficiario.getEdad());
-        System.out.printf("%-15s: %s%n", "Discapacidad", beneficiario.getDiscapacidad());
+        System.out.printf("%-15s: %s%n", "Discapacidad(es)", String.join(", ", beneficiario.getDiscapacidades()));
         System.out.printf("%-15s: %s%n", "Detalles", beneficiario.getDetallesAdicionales());
         System.out.println("===============================================\n");
-
+    
         System.out.println("Ingrese los nuevos datos (deje en blanco para mantener el valor actual):\n");
-
+    
+        // Nombre
         System.out.print("Nombre: ");
         String nombre = scanner.nextLine();
         if (!nombre.isBlank()) {
             beneficiario.setNombre(nombre);
         }
-
-        System.out.print("Edad: ");
-        String edadInput = scanner.nextLine();
-        if (!edadInput.isBlank()) {
+    
+        // Edad
+        String edadInput;
+        int edad;
+        while (true) {
+            System.out.print("Edad: ");
+            edadInput = scanner.nextLine();
+            if (edadInput.isBlank()) {
+                break;  // Mantener el valor actual si no se ingresa un nuevo valor
+            }
             try {
-                int edad = Integer.parseInt(edadInput);
-                beneficiario.setEdad(edad);
+                edad = Integer.parseInt(edadInput);
+                if (edad >= 0) {
+                    beneficiario.setEdad(edad);
+                    break;
+                } else {
+                    System.out.println("Edad no válida. Debe ser un número entero positivo.");
+                }
             } catch (NumberFormatException e) {
                 System.out.println("Edad no válida. Debe ingresar un número entero.");
             }
         }
-
-        System.out.print("Discapacidad: ");
-        String discapacidad = scanner.nextLine();
-        if (!discapacidad.isBlank()) {
-            beneficiario.setDiscapacidad(discapacidad);
+    
+        // Discapacidad(es)
+        System.out.print("Discapacidad(es) (separadas por comas): ");
+        String discapacidadesInput = scanner.nextLine();
+        if (!discapacidadesInput.isBlank()) {
+            List<String> discapacidades = List.of(discapacidadesInput.split("\\s*,\\s*"));
+            beneficiario.setDiscapacidades(discapacidades);
         }
-
+    
+        // Detalles
         System.out.print("Detalles: ");
         String detalles = scanner.nextLine();
-        if (!detalles.isBlank()) {
-            beneficiario.setDetallesAdicionales(detalles);
-        }
-
+        beneficiario.setDetallesAdicionales(detalles);
+        
+    
+        BeneficiarioManager.actualizarBeneficiario(beneficiario);
+    
         System.out.println("Beneficiario actualizado exitosamente.");
-
+    
         System.out.println("===============================================");
         System.out.println("Presione Enter para continuar...");
         scanner.nextLine(); // Esperar que el usuario presione Enter
     }
+    
 
     private static void eliminarBeneficiario(Scanner scanner) {
         BeneficiarioManager.mostrarBeneficiariosEnTabla();
@@ -173,7 +196,7 @@ public class MenuBeneficiarios {
         Beneficiario beneficiario = BeneficiarioManager.obtenerBeneficiarioPorId(id);
 
         if (beneficiario != null) {
-            beneficiarios.remove(beneficiario);
+            BeneficiarioManager.eliminarBeneficiario(id);
             System.out.println("\n-----------------------------------------------");
             System.out.println("Beneficiario eliminado exitosamente.");
         } else {

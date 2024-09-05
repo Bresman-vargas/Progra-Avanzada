@@ -1,5 +1,8 @@
 package systemdisability;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author bresm
@@ -8,23 +11,24 @@ public class Beneficiario {
     private String id;
     private String nombre;
     private int edad;
-    private String discapacidad;
+    private List<String> discapacidades;
     private String detallesAdicionales;
 
-    public Beneficiario(String nombre, int edad, String discapacidad, String detallesAdicionales) {
+    // Constructor con discapacidades múltiples
+    public Beneficiario(String nombre, int edad, List<String> discapacidades, String detallesAdicionales) {
         this.id = Utilidades.generateUniqueId();
         this.nombre = nombre;
         this.edad = edad;
-        this.discapacidad = discapacidad;
+        this.discapacidades = new ArrayList<>(discapacidades);
         this.detallesAdicionales = detallesAdicionales;
     }
-    public Beneficiario(String nombre, int edad, String discapacidad) {
-        this.id = Utilidades.generateUniqueId();
-        this.nombre = nombre;
-        this.edad = edad;
-        this.discapacidad = discapacidad;
+    
+    // Constructor sin detalles adicionales
+    public Beneficiario(String nombre, int edad, List<String> discapacidades) {
+        this(nombre, edad, discapacidades, null);
     }
 
+    // Getters y Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
@@ -34,16 +38,17 @@ public class Beneficiario {
     public int getEdad() { return edad; }
     public void setEdad(int edad) { this.edad = edad; }
 
-    public String getDiscapacidad() { return discapacidad; }
-    public void setDiscapacidad(String discapacidad) { this.discapacidad = discapacidad; }
+    public List<String> getDiscapacidades() { return discapacidades; }
+    public void setDiscapacidades(List<String> discapacidades) { this.discapacidades = discapacidades; }
 
     public String getDetallesAdicionales() { return detallesAdicionales; }
     public void setDetallesAdicionales(String detallesAdicionales) { this.detallesAdicionales = detallesAdicionales; }
 
     @Override
     public String toString() {
-        return String.format("%-15s %-25s %-5d %-15s %-30s", id, nombre, edad, discapacidad, detallesAdicionales);
+        return String.format("%-15s %-25s %-5d %-25s %-30s", id, nombre, edad, String.join(", ", discapacidades), detallesAdicionales);
     }
 }
+
 
 

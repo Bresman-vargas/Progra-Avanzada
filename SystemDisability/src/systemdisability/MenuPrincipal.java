@@ -20,10 +20,7 @@ public class MenuPrincipal {
             System.out.println("1. Registro de Beneficiarios");
             System.out.println("2. Administración de Servicios de Apoyo");
             System.out.println("3. Seguimiento de Impacto");
-            System.out.println("4. Gestión de Múltiples Beneficiarios");
-            System.out.println("5. Avisos de Servicios");
-            System.out.println("6. Generar Reporte Semanal");
-            System.out.println("7. Salir");
+            System.out.println("4. Salir");
             System.out.println("===============================================");
             System.out.print("Seleccione una opción: ");
 
@@ -34,10 +31,10 @@ public class MenuPrincipal {
                 try {
                     opcion = scanner.nextInt();
                     scanner.nextLine();  // Limpiar el buffer del scanner
-                    if (opcion >= 1 && opcion <= 7) {
+                    if (opcion >= 1 && opcion <= 4) {
                         entradaValida = true;
                     } else {
-                        System.out.println("Opción no válida. Debe ingresar un número entre 1 y 7.");
+                        System.out.println("Opción no válida. Debe ingresar un número entre 1 y 4.");
                         System.out.print("Seleccione una opción: ");
                     }
                 } catch (InputMismatchException e) {
@@ -60,15 +57,6 @@ public class MenuPrincipal {
                     // Llamar al método para el seguimiento de impacto
                     break;
                 case 4:
-                    // Llamar al método para la gestión de múltiples beneficiarios
-                    break;
-                case 5:
-                    // Llamar al método para avisos de servicios
-                    break;
-                case 6:
-                    // Llamar al método para generar reportes semanales
-                    break;
-                case 7:
                     System.out.println("¡Hasta luego!");
                     scanner.close();
                     System.exit(0);

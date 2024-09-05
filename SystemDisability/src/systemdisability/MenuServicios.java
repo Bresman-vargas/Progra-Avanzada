@@ -58,72 +58,108 @@ public class MenuServicios {
         System.out.println("===============================================");
         System.out.println("Añadir Nuevo Servicio");
         System.out.println("===============================================");
-
-        System.out.print("Ingrese el nombre del servicio: ");
-        String nombre = scanner.nextLine();
-
-        System.out.print("Ingrese la descripción del servicio: ");
-        String descripcion = scanner.nextLine();
-
+    
+        String nombre;
+        String descripcion;
+    
+        // Nombre del servicio
+        while (true) {
+            System.out.print("Ingrese el nombre del servicio: ");
+            nombre = scanner.nextLine();
+            if (!nombre.isBlank()) {
+                break;
+            } else {
+                System.out.println("El nombre del servicio no puede quedar en blanco. Intente de nuevo.");
+            }
+        }
+    
+        // Descripción del servicio
+        while (true) {
+            System.out.print("Ingrese la descripción del servicio: ");
+            descripcion = scanner.nextLine();
+            if (!descripcion.isBlank()) {
+                break;
+            } else {
+                System.out.println("La descripción del servicio no puede quedar en blanco. Intente de nuevo.");
+            }
+        }
+    
+        // Crear y agregar el nuevo servicio
         Servicio nuevoServicio = new Servicio(nombre, descripcion);
         ServicioManager.agregarServicio(nuevoServicio);
-
+    
         System.out.println("\n-----------------------------------------------");
         System.out.println("Servicio añadido exitosamente.");
         System.out.println("Presione Enter para continuar...");
         scanner.nextLine();  // Esperar que el usuario presione Enter
     }
+    
 
     private static void editarServicio() {
-    ServicioManager.mostrarServiciosEnTabla();
-    System.out.println("\n===============================================");
-    System.out.println("   EDITAR INFORMACIÓN DE SERVICIO");
-    System.out.println("===============================================");
-
-    System.out.print("Ingrese el código del servicio a editar: ");
-    String codigo = scanner.nextLine().trim();
-
-    Servicio servicio = ServicioManager.obtenerServicioPorCodigo(codigo);
-
-    if (servicio == null) {
-        System.out.println("No se encontró un servicio con ese código.");
+        ServicioManager.mostrarServiciosEnTabla();
+        System.out.println("\n===============================================");
+        System.out.println("   EDITAR INFORMACIÓN DE SERVICIO");
+        System.out.println("===============================================");
+    
+        System.out.print("Ingrese el código del servicio a editar: ");
+        String codigo = scanner.nextLine().trim();
+    
+        Servicio servicio = ServicioManager.obtenerServicioPorCodigo(codigo);
+    
+        if (servicio == null) {
+            System.out.println("No se encontró un servicio con ese código.");
+            System.out.println("Presione Enter para continuar...");
+            scanner.nextLine();  // Esperar que el usuario presione Enter
+            return;
+        }
+    
+        Utilidades.limpiarPantalla();
+    
+        System.out.println("===============================================");
+        System.out.println("            INFORMACIÓN DEL SERVICIO");
+        System.out.println("===============================================");
+        System.out.printf("%-15s: %s%n", "Código", servicio.getId());
+        System.out.printf("%-15s: %s%n", "Nombre", servicio.getNombre());
+        System.out.printf("%-15s: %s%n", "Descripción", servicio.getDescripcion());
+        System.out.println("===============================================\n");
+    
+        System.out.println("Ingrese los nuevos datos (deje en blanco para mantener el valor actual):");
+    
+        // Editar nombre del servicio
+        String nuevoNombre;
+        while (true) {
+            System.out.print("Nombre: ");
+            nuevoNombre = scanner.nextLine().trim();
+            if (!nuevoNombre.isBlank()) {
+                servicio.setNombre(nuevoNombre);
+                break;
+            } else {
+                System.out.println("El nombre no puede quedar en blanco. Intente de nuevo.");
+            }
+        }
+    
+        // Editar descripción del servicio
+        String nuevaDescripcion;
+        while (true) {
+            System.out.print("Descripción: ");
+            nuevaDescripcion = scanner.nextLine().trim();
+            if (!nuevaDescripcion.isBlank()) {
+                servicio.setDescripcion(nuevaDescripcion);
+                break;
+            } else {
+                System.out.println("La descripción no puede quedar en blanco. Intente de nuevo.");
+            }
+        }
+    
+        // Actualizar el servicio en el manager
+        ServicioManager.actualizarServicio(servicio);
+    
+        System.out.println("Servicio actualizado exitosamente.");
+        System.out.println("===============================================");
         System.out.println("Presione Enter para continuar...");
-        scanner.nextLine();  // Esperar que el usuario presione Enter
-        return;
+        scanner.nextLine(); // Esperar que el usuario presione Enter
     }
-
-    Utilidades.limpiarPantalla();
-
-    System.out.println("===============================================");
-    System.out.println("          INFORMACIÓN DEL SERVICIO");
-    System.out.println("===============================================");
-    System.out.printf("%-15s: %s%n", "Código", servicio.getId());
-    System.out.printf("%-15s: %s%n", "Nombre", servicio.getNombre());
-    System.out.printf("%-15s: %s%n", "Descripción", servicio.getDescripcion());
-    System.out.println("===============================================\n");
-
-    System.out.println("Ingrese los nuevos datos (deje en blanco para mantener el valor actual):\n");
-
-    System.out.print("Nombre: ");
-    String nombre = scanner.nextLine().trim();
-    if (!nombre.isBlank()) {
-        servicio.setNombre(nombre);
-    }
-
-    System.out.print("Descripción: ");
-    String descripcion = scanner.nextLine().trim();
-    if (!descripcion.isBlank()) {
-        servicio.setDescripcion(descripcion);
-    }
-
-    // Actualizar el servicio en el sistema
-    ServicioManager.actualizarServicio(servicio);
-
-    System.out.println("Servicio actualizado exitosamente.");
-    System.out.println("===============================================");
-    System.out.println("Presione Enter para continuar...");
-    scanner.nextLine();  // Esperar que el usuario presione Enter
-    }
+    
 
     private static void asignarServicio() {
     Utilidades.limpiarPantalla();
