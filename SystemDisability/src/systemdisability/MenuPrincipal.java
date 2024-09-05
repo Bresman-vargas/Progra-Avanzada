@@ -55,7 +55,8 @@ public class MenuPrincipal {
                     MenuServicios.mostrarMenu(scanner);
                     break; 
                 case 3:
-                    // Llamar al método para el seguimiento de impacto
+                    Utilidades.limpiarPantalla();
+                    MenuSeguimientoImpacto.mostrarMenu(scanner);
                     break;
                 case 4:
                     System.out.println("¡Hasta luego!");

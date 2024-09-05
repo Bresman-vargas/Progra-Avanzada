@@ -3,10 +3,6 @@ package systemdisability;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author bresm
- */
 public class Beneficiario { 
     private String id;
     private String nombre;
@@ -16,7 +12,7 @@ public class Beneficiario {
 
     // Constructor con discapacidades múltiples
     public Beneficiario(String nombre, int edad, List<String> discapacidades, String detallesAdicionales) {
-        this.id = Utilidades.generateUniqueId();
+        this.id = Utilidades.generateUniqueId();  // Generación automática de ID
         this.nombre = nombre;
         this.edad = edad;
         this.discapacidades = new ArrayList<>(discapacidades);
@@ -49,6 +45,3 @@ public class Beneficiario {
         return String.format("%-15s %-25s %-5d %-25s %-30s", id, nombre, edad, String.join(", ", discapacidades), detallesAdicionales);
     }
 }
-
-
-

@@ -1,10 +1,9 @@
+/* 
 package systemdisability;
 
-
-/**
  *
  * @author bresm
- */
+
 public class Asignacion {
     private String id;
     private Beneficiario beneficiario;
@@ -40,3 +39,4 @@ public class Asignacion {
         return "ID: " + id + ", Beneficiario: " + beneficiario.getNombre() + ", Servicio: " + servicio.getNombre() + ", Fecha: " + fecha + ", Hora: " + hora;
     }
 }
+*/

@@ -5,11 +5,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 public class ServicioBeneficiariosManager {
     // Reutiliza la misma instancia de Scanner
-    private static Scanner scanner = new Scanner(System.in);
 
     // Mapa que asocia el ID del beneficiario con una lista de IDs de servicios asignados
     private static final Map<String, List<String>> asignaciones = new HashMap<>();
@@ -105,10 +103,6 @@ public class ServicioBeneficiariosManager {
             // Línea final de la tabla
             System.out.printf("+------------------------------------------------------------------------------------%n");
         }
-
-        System.out.println("===============================================");
-        System.out.println("Presione Enter para continuar...");
-        scanner.nextLine(); // Esperar que el usuario presione Enter
     }
     
     // Método para obtener una copia del mapa de asignaciones

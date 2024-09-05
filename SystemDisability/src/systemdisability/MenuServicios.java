@@ -209,6 +209,9 @@ public class MenuServicios {
 
     private static void verServiciosAsignados() {
         ServicioBeneficiariosManager.mostrarServiciosAsignados();
+        System.out.println("===============================================");
+        System.out.println("Presione Enter para continuar...");
+        scanner.nextLine(); // Esperar que el usuario presione Enter
     }
 
 

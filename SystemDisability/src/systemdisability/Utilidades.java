@@ -1,4 +1,6 @@
 package systemdisability;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 /**
  * @author bresm
@@ -16,4 +18,11 @@ public class Utilidades {
     public static String generateUniqueId() {
         return String.format("%08d", random.nextInt(100000000));
     } 
+
+    // Método estático para obtener la fecha actual
+    public static String obtenerFechaActual() {
+        LocalDateTime fechaHoraActual = LocalDateTime.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        return fechaHoraActual.format(formato);
+    }
 } 
