@@ -115,4 +115,24 @@ public class ServicioBeneficiariosManager {
     public static Map<String, List<String>> obtenerAsignaciones() {
         return new HashMap<>(asignaciones); // Devuelve una copia del mapa de asignaciones
     }
+
+    // Método para asignar un servicio a un beneficiario por nombre
+    public static void asignarServicioPorNombre(String nombreBeneficiario, String nombreServicio) {
+        Beneficiario beneficiario = BeneficiarioManager.obtenerBeneficiarioPorNombre(nombreBeneficiario);
+        Servicio servicio = ServicioManager.obtenerServicioPorNombre(nombreServicio);
+        
+        if (beneficiario != null && servicio != null) {
+            asignarServicio(beneficiario.getId(), servicio.getId());
+        } else {
+            System.out.println("Beneficiario o servicio no encontrado.");
+        }
+    }
+
+    public static void inicializarAsignacionesDePrueba() {
+        // Asignar servicios por nombre de beneficiario y nombre de servicio
+        asignarServicioPorNombre("Sara Morales", "Fisioterapia");
+        asignarServicioPorNombre("Eduardo González", "Terapia Ocupacional");
+        asignarServicioPorNombre("Mónica López", "Inserción Laboral");
+        asignarServicioPorNombre("Jessica Ramírez", "Asesoría Psicológica");
+    }
 }

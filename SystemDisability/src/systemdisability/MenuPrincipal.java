@@ -9,6 +9,7 @@ public class MenuPrincipal {
         System.out.print("hola");
         BeneficiarioManager.inicializarDatosBE();
         ServicioManager.inicializarDatosSE();
+        ServicioBeneficiariosManager.inicializarAsignacionesDePrueba();
         Scanner scanner = new Scanner(System.in);
         while (true) {
             Utilidades.limpiarPantalla();

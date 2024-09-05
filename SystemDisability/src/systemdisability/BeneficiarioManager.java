@@ -64,6 +64,15 @@ public class BeneficiarioManager {
         System.out.println("===============================================");
     }
 
+    public static Beneficiario obtenerBeneficiarioPorNombre(String nombre) {
+        for (Beneficiario beneficiario : beneficiarios.values()) {
+            if (beneficiario.getNombre().equalsIgnoreCase(nombre)) {
+                return beneficiario;
+            }
+        }
+        return null; // Si no se encuentra
+    }
+
     // Método para inicializar la lista de beneficiarios con datos de prueba
     public static void inicializarDatosBE() {
         // Agregar beneficiarios con múltiples discapacidades

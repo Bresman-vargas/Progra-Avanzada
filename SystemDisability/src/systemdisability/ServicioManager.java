@@ -57,6 +57,15 @@ public class ServicioManager {
         System.out.println("===============================================");
     }
 
+    public static Servicio obtenerServicioPorNombre(String nombre) {
+        for (Servicio servicio : servicios.values()) {
+            if (servicio.getNombre().equalsIgnoreCase(nombre)) {
+                return servicio;
+            }
+        }
+        return null; // Si no se encuentra
+    }
+
     public static void inicializarDatosSE() {
     // Agregar servicios con descripciones detalladas
     ServicioManager.agregarServicio(new Servicio("Fisioterapia", "Sesiones de fisioterapia para mejorar la movilidad"));

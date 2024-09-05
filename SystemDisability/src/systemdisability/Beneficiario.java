@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author bresm
  */
-public class Beneficiario {
+public class Beneficiario { 
     private String id;
     private String nombre;
     private int edad;
