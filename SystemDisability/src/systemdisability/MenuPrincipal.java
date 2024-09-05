@@ -12,7 +12,7 @@ public class MenuPrincipal {
         ServicioBeneficiariosManager.inicializarAsignacionesDePrueba();
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            Utilidades.limpiarPantalla();
+            Utilidades.limpiarPantalla(); 
             
             System.out.println("===============================================");
             System.out.println("Sistema de Gestión de Servicios");
