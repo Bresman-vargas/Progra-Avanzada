@@ -1,5 +1,7 @@
 package systemdisability;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ServicioManager {
@@ -64,6 +66,10 @@ public class ServicioManager {
             }
         }
         return null; // Si no se encuentra
+    }
+
+    public static List<Servicio> obtenerTodosLosServicios() {
+        return new ArrayList<>(servicios.values());
     }
 
     public static void inicializarDatosSE() {

@@ -1,5 +1,6 @@
 package systemdisability;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,10 @@ public class BeneficiarioManager {
                     beneficiario.getDetallesAdicionales());
         }
         System.out.println("===============================================");
+    }
+
+    public static List<Beneficiario> obtenerTodosLosBeneficiarios() {
+        return new ArrayList<>(beneficiarios.values());
     }
 
     public static Beneficiario obtenerBeneficiarioPorNombre(String nombre) {
