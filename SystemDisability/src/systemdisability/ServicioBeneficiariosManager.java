@@ -11,25 +11,58 @@ public class ServicioBeneficiariosManager {
 
     // Mapa que asocia el ID del beneficiario con una lista de IDs de servicios asignados
     private static final Map<String, List<String>> asignaciones = new HashMap<>();
+    //mapa adicional para gestionar el progreso de cada servicio asignado a un beneficiario
+    private static final Map<String, List<ProgresoBeneficiario>> progresoAsignaciones = new HashMap<>();
+
 
     // Método para asignar un servicio a un beneficiario
-    public static void asignarServicio(String beneficiarioId, String servicioId) {
-        // Obtiene la lista actual de servicios asignados para el beneficiario
+    /*public static void asignarServicio(String beneficiarioId, String servicioId) {
+        // Asignación en el mapa anterior
         List<String> servicios = asignaciones.get(beneficiarioId);
         
         if (servicios == null) {
-            // Si no hay servicios asignados, crea una nueva lista
             servicios = new ArrayList<>();
             asignaciones.put(beneficiarioId, servicios);
         }
         
-        if (servicios.contains(servicioId)) {
-            System.out.println("El servicio con ID " + servicioId + " ya está asignado al beneficiario con ID " + beneficiarioId + ".");
-        } else {
+        if (!servicios.contains(servicioId)) {
             servicios.add(servicioId);
             System.out.println("Servicio asignado exitosamente.");
+    
+            // Asignar el progreso inicial en 0
+            List<ProgresoBeneficiario> progresos = progresoAsignaciones.get(beneficiarioId);
+            if (progresos == null) {
+                progresos = new ArrayList<>();
+                progresoAsignaciones.put(beneficiarioId, progresos);
+            }
+            progresos.add(new ProgresoBeneficiario(servicioId, 0)); // Progreso inicial
+        } else {
+            System.out.println("El servicio ya está asignado al beneficiario.");
+        }
+    }*/
+    public static void asignarServicio(String beneficiarioId, String servicioId) {
+        List<String> servicios = asignaciones.get(beneficiarioId);
+        if (servicios == null) {
+            servicios = new ArrayList<>();
+            asignaciones.put(beneficiarioId, servicios);
+        }
+    
+        if (!servicios.contains(servicioId)) {
+            servicios.add(servicioId);
+            // Asegúrate de añadir el progreso inicial
+            List<ProgresoBeneficiario> progresos = progresoAsignaciones.get(beneficiarioId);
+            if (progresos == null) {
+                progresos = new ArrayList<>();
+                progresoAsignaciones.put(beneficiarioId, progresos);
+            }
+            progresos.add(new ProgresoBeneficiario(servicioId, 0)); // Progreso inicial en 0
+            System.out.println("Servicio asignado exitosamente.");
+        } else {
+            System.out.println("El servicio ya está asignado al beneficiario.");
         }
     }
+    
+    
 
     // Método para obtener la lista de servicios asignados a un beneficiario
     public static List<String> obtenerServiciosAsignados(String beneficiarioId) {
@@ -58,9 +91,9 @@ public class ServicioBeneficiariosManager {
         System.out.println("===============================================");
     
         // Obtener asignaciones
-        Map<String, List<String>> asignaciones = ServicioBeneficiariosManager.obtenerAsignaciones();
+        Map<String, List<String>> asignacioness = ServicioBeneficiariosManager.obtenerAsignaciones();
     
-        if (asignaciones.isEmpty()) {
+        if (asignacioness.isEmpty()) {
             System.out.println("No hay servicios asignados a beneficiarios.");
         } else {
             // Encabezado de la tabla (incluye ID del beneficiario)
@@ -68,7 +101,7 @@ public class ServicioBeneficiariosManager {
             System.out.printf("+--------------------------------------------------------------------------------------------------------%n");
     
             // Imprimir detalles de las asignaciones
-            for (Map.Entry<String, List<String>> entry : asignaciones.entrySet()) {
+            for (Map.Entry<String, List<String>> entry : asignacioness.entrySet()) {
                 String beneficiarioId = entry.getKey();
                 List<String> serviciosIds = entry.getValue();
     
@@ -133,5 +166,10 @@ public class ServicioBeneficiariosManager {
         asignarServicioPorNombre("Jessica Ramírez", "Asesoría Psicológica");
     }
 
+    public static List<ProgresoBeneficiario> obtenerProgresoBeneficiario(String beneficiarioId) {
+        return progresoAsignaciones.getOrDefault(beneficiarioId, Collections.emptyList());
+    }
+    
+    
     
 }

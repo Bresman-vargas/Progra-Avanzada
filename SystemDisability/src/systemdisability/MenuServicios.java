@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class MenuServicios {
 
-    private static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
 
     public static void mostrarMenu(Scanner scanner) {
         while (true) {

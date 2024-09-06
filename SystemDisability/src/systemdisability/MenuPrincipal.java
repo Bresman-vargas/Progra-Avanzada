@@ -46,25 +46,24 @@ public class MenuPrincipal {
             }
 
             switch (opcion) {
-                case 1:
+                case 1 -> {
                     Utilidades.limpiarPantalla();
                     MenuBeneficiarios.mostrarMenu(scanner);
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     Utilidades.limpiarPantalla();
                     MenuServicios.mostrarMenu(scanner);
-                    break; 
-                case 3:
+                }
+                case 3 -> {
                     Utilidades.limpiarPantalla();
                     MenuSeguimientoImpacto.mostrarMenu(scanner);
-                    break;
-                case 4:
+                }
+                case 4 -> {
                     System.out.println("¡Hasta luego!");
                     scanner.close();
                     System.exit(0);
-                    break;
-                default:
-                    System.out.println("Opción no válida. Intente de nuevo.");
+                }
+                default -> System.out.println("Opción no válida. Intente de nuevo.");
             }
         }
     }

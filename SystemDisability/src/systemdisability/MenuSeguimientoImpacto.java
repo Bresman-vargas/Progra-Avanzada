@@ -1,11 +1,12 @@
 package systemdisability;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class MenuSeguimientoImpacto {
 
     public static void mostrarMenu(Scanner scanner) {
-        int opcion = 0;
+        int opcion;
 
         do {
             System.out.println("==============================================");
@@ -21,55 +22,88 @@ public class MenuSeguimientoImpacto {
             scanner.nextLine();  // Limpiar el buffer
 
             switch (opcion) {
-                case 1:
-                    verProgresoBeneficiario(scanner);
-                    break;
-                case 2:
-                    actualizarProgresoBeneficiario(scanner);
-                    break;
-                case 3:
-                    System.out.println("Volviendo al menú principal...");
-                    break;
-                default:
-                    System.out.println("Opción no válida, intente de nuevo.");
+                case 1 -> verProgresoBeneficiario(scanner);
+                case 2 -> actualizarProgresoBeneficiario(scanner);
+                case 3 -> System.out.println("Volviendo al menú principal...");
+                default -> System.out.println("Opción no válida, intente de nuevo.");
             }
 
         } while (opcion != 3);
     }
 
-    private static void verProgresoBeneficiario(Scanner scanner) {
-        ServicioBeneficiariosManager.mostrarServiciosAsignados();
-    
-        // Pedir ID del beneficiario
+        private static void verProgresoBeneficiario(Scanner scanner) {
+        BeneficiarioManager.mostrarBeneficiariosEnTabla();
+        
         System.out.print("Ingrese el ID del beneficiario: ");
         String idBeneficiario = scanner.nextLine();
-    
-        // Buscar beneficiario por ID
+
         Beneficiario beneficiario = BeneficiarioManager.obtenerBeneficiarioPorId(idBeneficiario);
-    
+        
         if (beneficiario != null) {
-            // Si el beneficiario existe, mostrar su nombre
-            System.out.println("Mostrando progreso del beneficiario: " + beneficiario.getNombre());
+            System.out.println("Progreso de " + beneficiario.getNombre() + ":");
+
+            List<ProgresoBeneficiario> progresos = ServicioBeneficiariosManager.obtenerProgresoBeneficiario(idBeneficiario);
             
-            // Aquí puedes agregar la lógica para mostrar el progreso en los servicios asignados
-            /*mostrarProgresoServicios(beneficiario);*/
+            if (progresos.isEmpty()) {
+                System.out.println("No hay servicios asignados.");
+            } else {
+                System.out.printf("| %-20s | %-10s |%n", "Servicio", "Progreso");
+                System.out.printf("+----------------------+------------+%n");
+
+                for (ProgresoBeneficiario progreso : progresos) {
+                    Servicio servicio = ServicioManager.obtenerServicioPorCodigo(progreso.getServicioId());
+                    System.out.printf("| %-20s | %-10d |%n", servicio.getNombre(), progreso.getProgreso());
+                }
+                System.out.printf("+----------------------|------------+%n");
+            }
         } else {
-            // Si no se encuentra el beneficiario, mostrar mensaje de error
-            System.out.println("No se encontró un beneficiario con el ID: " + idBeneficiario);
+            System.out.println("Beneficiario no encontrado.");
         }
     }
 
     private static void actualizarProgresoBeneficiario(Scanner scanner) {
-        // Lógica para actualizar el progreso del beneficiario en un servicio
+        BeneficiarioManager.mostrarBeneficiariosEnTabla();
+        
         System.out.print("Ingrese el ID del beneficiario: ");
         String idBeneficiario = scanner.nextLine();
-        System.out.print("Ingrese el nombre del servicio: ");
-        String servicio = scanner.nextLine();
+        
+        Beneficiario beneficiario = BeneficiarioManager.obtenerBeneficiarioPorId(idBeneficiario);
+        if (beneficiario == null) {
+            System.out.println("Beneficiario no encontrado.");
+            return;
+        }
+        ServicioManager.mostrarServiciosEnTabla();
+        
+        System.out.print("Ingrese el ID del servicio: ");
+        String servicioId = scanner.nextLine();
+        
+        Servicio servicio = ServicioManager.obtenerServicioPorCodigo(servicioId);
+        if (servicio == null) {
+            System.out.println("Servicio no encontrado.");
+            return;
+        }
+    
         System.out.print("Ingrese el nuevo nivel de progreso (1-10): ");
         int progreso = scanner.nextInt();
         scanner.nextLine();  // Limpiar el buffer
-
-        System.out.println("Actualizando el progreso del beneficiario con ID " + idBeneficiario + " en el servicio " + servicio + " a " + progreso + "/10.");
-        // Aquí iría la lógica para actualizar el progreso.
+        
+        if (progreso < 1 || progreso > 10) {
+            System.out.println("El progreso debe estar entre 1 y 10.");
+            return;
+        }
+    
+        // Actualizar el progreso
+        List<ProgresoBeneficiario> progresos = ServicioBeneficiariosManager.obtenerProgresoBeneficiario(idBeneficiario);
+        for (ProgresoBeneficiario p : progresos) {
+            if (p.getServicioId().equals(servicioId)) {
+                p.setProgreso(progreso);
+                System.out.println("Progreso actualizado exitosamente.");
+                return;
+            }
+        }
+        
+        System.out.println("No se encontró el servicio para el beneficiario.");
     }
+    
+
 }
