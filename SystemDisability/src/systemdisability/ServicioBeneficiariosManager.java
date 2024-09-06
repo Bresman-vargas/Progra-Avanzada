@@ -15,6 +15,8 @@ public class ServicioBeneficiariosManager {
     private static final Map<String, List<ProgresoBeneficiario>> progresoAsignaciones = new HashMap<>();
 
 
+
+
     // Método para asignar un servicio a un beneficiario
     /*public static void asignarServicio(String beneficiarioId, String servicioId) {
         // Asignación en el mapa anterior

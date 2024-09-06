@@ -21,6 +21,7 @@ public class MenuSeguimientoImpacto {
             opcion = scanner.nextInt();
             scanner.nextLine();  // Limpiar el buffer
 
+            
             switch (opcion) {
                 case 1 -> verProgresoBeneficiario(scanner);
                 case 2 -> actualizarProgresoBeneficiario(scanner);
