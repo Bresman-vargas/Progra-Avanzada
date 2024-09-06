@@ -39,11 +39,24 @@ public class MenuSeguimientoImpacto {
 
     private static void verProgresoBeneficiario(Scanner scanner) {
         ServicioBeneficiariosManager.mostrarServiciosAsignados();
-        // Lógica para ver el progreso del beneficiario
+    
+        // Pedir ID del beneficiario
         System.out.print("Ingrese el ID del beneficiario: ");
         String idBeneficiario = scanner.nextLine();
-        System.out.println("Mostrando progreso del beneficiario con ID: " + idBeneficiario);
-        // Aquí iría la lógica para mostrar el progreso del beneficiario en los servicios asignados.
+    
+        // Buscar beneficiario por ID
+        Beneficiario beneficiario = BeneficiarioManager.obtenerBeneficiarioPorId(idBeneficiario);
+    
+        if (beneficiario != null) {
+            // Si el beneficiario existe, mostrar su nombre
+            System.out.println("Mostrando progreso del beneficiario: " + beneficiario.getNombre());
+            
+            // Aquí puedes agregar la lógica para mostrar el progreso en los servicios asignados
+            /*mostrarProgresoServicios(beneficiario);*/
+        } else {
+            // Si no se encuentra el beneficiario, mostrar mensaje de error
+            System.out.println("No se encontró un beneficiario con el ID: " + idBeneficiario);
+        }
     }
 
     private static void actualizarProgresoBeneficiario(Scanner scanner) {

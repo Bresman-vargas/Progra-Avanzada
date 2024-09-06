@@ -56,52 +56,55 @@ public class ServicioBeneficiariosManager {
         System.out.println("===============================================");
         System.out.println("           Ver Servicios Asignados            ");
         System.out.println("===============================================");
-
+    
         // Obtener asignaciones
         Map<String, List<String>> asignaciones = ServicioBeneficiariosManager.obtenerAsignaciones();
-
+    
         if (asignaciones.isEmpty()) {
             System.out.println("No hay servicios asignados a beneficiarios.");
         } else {
-            // Encabezado de la tabla
-            System.out.printf("| %-18s | %-28s | %-28s |%n", "Beneficiario", "Servicio", "Detalles");
-            System.out.printf("+------------------------------------------------------------------------------------%n");
-
+            // Encabezado de la tabla (incluye ID del beneficiario)
+            System.out.printf("| %-18s | %-18s | %-28s | %-28s |%n", "ID Beneficiario", "Beneficiario", "Servicio", "Detalles");
+            System.out.printf("+--------------------------------------------------------------------------------------------------------%n");
+    
             // Imprimir detalles de las asignaciones
             for (Map.Entry<String, List<String>> entry : asignaciones.entrySet()) {
                 String beneficiarioId = entry.getKey();
                 List<String> serviciosIds = entry.getValue();
-
+    
                 // Obtener detalles del beneficiario
                 Beneficiario beneficiario = BeneficiarioManager.obtenerBeneficiarioPorId(beneficiarioId);
-
+    
                 if (beneficiario != null) {
                     for (String servicioId : serviciosIds) {
                         // Obtener detalles del servicio
                         Servicio servicio = ServicioManager.obtenerServicioPorCodigo(servicioId);
-
+    
                         if (servicio != null) {
-                            System.out.printf("| %-18s | %-28s | %-28s |%n",
-                                    beneficiario.getNombre(),
-                                    servicio.getNombre(),
-                                    servicio.getDescripcion());
+                            System.out.printf("| %-18s | %-18s | %-28s | %-28s |%n",
+                                    beneficiario.getId(),         // Mostrar ID del beneficiario
+                                    beneficiario.getNombre(),     // Mostrar nombre del beneficiario
+                                    servicio.getNombre(),         // Mostrar nombre del servicio
+                                    servicio.getDescripcion());   // Mostrar detalles del servicio
                         } else {
-                            System.out.printf("| %-18s | %-28s | %-28s |%n",
+                            System.out.printf("| %-18s | %-18s | %-28s | %-28s |%n",
                                     beneficiarioId,
+                                    beneficiario.getNombre(),
                                     "Servicio no disponible",
                                     "Detalles no disponibles");
                         }
                     }
                 } else {
-                    System.out.printf("| %-18s | %-28s | %-28s |%n",
+                    System.out.printf("| %-18s | %-18s | %-28s | %-28s |%n",
                             beneficiarioId,
+                            "Beneficiario no disponible",
                             "Servicio no disponible",
-                            "Detalles no disponibles"); 
+                            "Detalles no disponibles");
                 }
             }
-
+    
             // Línea final de la tabla
-            System.out.printf("+------------------------------------------------------------------------------------%n");
+            System.out.printf("+--------------------------------------------------------------------------------------------------------%n");
         }
     }
     
@@ -129,4 +132,6 @@ public class ServicioBeneficiariosManager {
         asignarServicioPorNombre("Mónica López", "Inserción Laboral");
         asignarServicioPorNombre("Jessica Ramírez", "Asesoría Psicológica");
     }
+
+    
 }

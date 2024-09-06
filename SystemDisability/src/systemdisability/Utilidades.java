@@ -16,7 +16,7 @@ public class Utilidades {
     
     // Método para generar un ID único de 8 dígitos
     public static String generateUniqueId() {
-        return String.format("%08d", random.nextInt(100000000));
+        return String.format("%04d", random.nextInt(1000));
     } 
 
     // Método estático para obtener la fecha actual
