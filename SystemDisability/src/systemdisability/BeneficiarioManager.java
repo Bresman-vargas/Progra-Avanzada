@@ -87,7 +87,6 @@ public class BeneficiarioManager {
     BeneficiarioManager.agregarBeneficiario(new Beneficiario("Jessica Ramírez", 32, List.of("Esquizofrenia", "Dislexia"), "Necesita apoyo en la salud mental y educación"));
     BeneficiarioManager.agregarBeneficiario(new Beneficiario("Beatriz Soto", 45, List.of("Esclerosis múltiple", "Distrofia muscular"), "Necesita atención médica constante y adaptaciones para la movilidad"));
 
-        // Puedes agregar más beneficiarios de prueba aquí con IDs únicos
     }
 }
 

@@ -14,32 +14,6 @@ public class ServicioBeneficiariosManager {
     //mapa adicional para gestionar el progreso de cada servicio asignado a un beneficiario
     private static final Map<String, List<ProgresoBeneficiario>> progresoAsignaciones = new HashMap<>();
 
-
-    // Método para asignar un servicio a un beneficiario
-    /*public static void asignarServicio(String beneficiarioId, String servicioId) {
-        // Asignación en el mapa anterior
-        List<String> servicios = asignaciones.get(beneficiarioId);
-        
-        if (servicios == null) {
-            servicios = new ArrayList<>();
-            asignaciones.put(beneficiarioId, servicios);
-        }
-        
-        if (!servicios.contains(servicioId)) {
-            servicios.add(servicioId);
-            System.out.println("Servicio asignado exitosamente.");
-    
-            // Asignar el progreso inicial en 0
-            List<ProgresoBeneficiario> progresos = progresoAsignaciones.get(beneficiarioId);
-            if (progresos == null) {
-                progresos = new ArrayList<>();
-                progresoAsignaciones.put(beneficiarioId, progresos);
-            }
-            progresos.add(new ProgresoBeneficiario(servicioId, 0)); // Progreso inicial
-        } else {
-            System.out.println("El servicio ya está asignado al beneficiario.");
-        }
-    }*/
     public static void asignarServicio(String beneficiarioId, String servicioId) {
         List<String> servicios = asignaciones.get(beneficiarioId);
         if (servicios == null) {
@@ -62,8 +36,6 @@ public class ServicioBeneficiariosManager {
         }
     }
     
-    
-
     // Método para obtener la lista de servicios asignados a un beneficiario
     public static List<String> obtenerServiciosAsignados(String beneficiarioId) {
         return asignaciones.getOrDefault(beneficiarioId, Collections.emptyList());
