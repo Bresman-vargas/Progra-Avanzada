@@ -1,14 +1,25 @@
 package igu;
-//hola
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import logica.Asignacion;
+import logica.Servicio;
+import logica.Controladora;
 
 public class MenuSeguimientoImpacto extends javax.swing.JFrame {
 
+    Controladora control = new Controladora();
     /**
      * Creates new form MenuSeguimientoImpacto
      */
     public MenuSeguimientoImpacto() {
         initComponents();
+        cargarRelacionesEnTabla();
     }
 
     /**
@@ -27,7 +38,7 @@ public class MenuSeguimientoImpacto extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaImpacto = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Seguimiento de Impacto");
@@ -73,18 +84,18 @@ public class MenuSeguimientoImpacto extends javax.swing.JFrame {
         jLabel1.setOpaque(true);
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 40, 160, 20));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaImpacto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {},
-                {},
-                {},
-                {}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-
+                "hla", "hola", "aaaal"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tablaImpacto);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 240, 960, -1));
 
@@ -116,6 +127,88 @@ public class MenuSeguimientoImpacto extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     
+    private void cargarRelacionesEnTabla() {
+        DefaultTableModel modeloTabla = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false; // Evitar que las celdas sean editables
+        }
+        };
+
+        // Establecemos los nombres de las columnas
+        String[] titulos = {"Id-Asig", "Beneficiario","Discapacidades", "Edad", "Servicio"};
+        modeloTabla.setColumnIdentifiers(titulos);
+
+        List<Asignacion> listarAsignaciones = control.traerAsignaciones();
+
+        if (listarAsignaciones != null) {
+            for (Asignacion asig : listarAsignaciones) {
+                // Obtener el nombre del beneficiario
+                String beneficiarioNombre = asig.getBeneficiario() != null ? asig.getBeneficiario().getNombre() : "N/A";
+
+                // Obtener la edad del beneficiario
+                String edadBeneficiario = asig.getBeneficiario() != null ? String.valueOf(asig.getBeneficiario().getEdad()) : "N/A";
+
+                // Obtener las discapacidades del beneficiario como lista
+                List<String> discapacidades = asig.getBeneficiario() != null ? asig.getBeneficiario().getDiscapacidades() : new ArrayList<>();
+                String beneficiarioDiscapacidades = "N/A";
+                if (!discapacidades.isEmpty()) {
+                    beneficiarioDiscapacidades = String.join(", ", discapacidades);
+                }
+
+                // Obtener el nombre del servicio y el responsable (solo el primero)
+                String servicioNombre = "N/A";
+                if (asig.getServicios() != null && !asig.getServicios().isEmpty()) {
+                    Servicio primerServicio = asig.getServicios().get(0);
+                    servicioNombre = primerServicio.getNombre(); // Mostrar solo el primer servicio
+                }
+           
+
+                // Crear un objeto con los datos para la tabla
+                Object[] objeto = {asig.getId(),  beneficiarioNombre, beneficiarioDiscapacidades, edadBeneficiario, servicioNombre};
+                modeloTabla.addRow(objeto);
+            }
+        }
+
+        tablaImpacto.setModel(modeloTabla);
+
+        // Evitar que las columnas se reordenen
+        tablaImpacto.getTableHeader().setReorderingAllowed(false);
+        // Evitar que las columnas se redimensionen
+        tablaImpacto.getTableHeader().setResizingAllowed(false);
+    
+        ajustarAnchoColumnas(tablaImpacto);
+        centrarColumnas(tablaImpacto, new int[]{0}); // Puedes ajustar esto según sea necesario
+        centrarColumnas(tablaImpacto, new int[]{3});
+    }
+    
+    
+    private void ajustarAnchoColumnas(JTable tabla) {
+        for (int i = 0; i < tabla.getColumnModel().getColumnCount(); i++) {
+        int width = 0; // Ancho inicial
+        
+        // Calcular el ancho necesario basado en las celdas
+        for (int j = 0; j < tabla.getRowCount(); j++) {
+            Object value = tabla.getValueAt(j, i);
+            if (value != null) {
+                width = Math.max(width, value.toString().length());
+            }
+        }
+        // Ajustar el ancho de la columna
+        tabla.getColumnModel().getColumn(i).setPreferredWidth(width * 10); // Ajustar el multiplicador según sea necesario
+        }
+    }   
+    
+    private void centrarColumnas(JTable tabla, int[] columnas) {
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+        renderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+        for (int col : columnas) {
+            tabla.getColumnModel().getColumn(col).setCellRenderer(renderer);
+        }
+    }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel irAtrasBen;
@@ -125,6 +218,6 @@ public class MenuSeguimientoImpacto extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tablaImpacto;
     // End of variables declaration//GEN-END:variables
 }

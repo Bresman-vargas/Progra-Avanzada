@@ -1,5 +1,4 @@
 package logica;
-
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,7 +11,7 @@ import javax.persistence.ManyToOne;
 public class Servicio implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Cambiado a IDENTITY para que sea coherente
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // ID se genera automáticamente
     private Long id; // Clave primaria
     
     private String nombre;
@@ -26,10 +25,11 @@ public class Servicio implements Serializable {
     public Servicio() {}
 
     // Constructor con parámetros
-    public Servicio(String nombre, String responsable, String descripcion) {
+    public Servicio(String nombre, String responsable, String descripcion, Beneficiario beneficiario) {
         this.nombre = nombre;
         this.responsable = responsable;
         this.descripcion = descripcion;
+        this.beneficiario = beneficiario;
     }
 
     // Getters y Setters
@@ -72,5 +72,10 @@ public class Servicio implements Serializable {
 
     public void setBeneficiario(Beneficiario beneficiario) {
         this.beneficiario = beneficiario;
+    }
+
+    @Override
+    public String toString() {
+        return nombre + " (Responsable: " + responsable + ")"; // Cambia esto si deseas más información
     }
 }

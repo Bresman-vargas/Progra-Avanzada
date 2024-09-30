@@ -1,5 +1,4 @@
 package igu;
-//hola
 import com.formdev.flatlaf.FlatLightLaf; 
 import com.formdev.flatlaf.IntelliJTheme;
 import java.awt.Color;
@@ -356,7 +355,7 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLimpiarActionPerformed
     
     private boolean enModoEdicion = false;
-    private int filaSeleccionada = -1;
+    
     
     private void btnEditarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarMouseClicked
             if (!enModoEdicion) {
@@ -457,6 +456,8 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEditarMouseClicked
 
+    private int filaSeleccionada = -1;
+    
     private void btnElimianrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElimianrActionPerformed
         // Obtener el índice de la fila seleccionada en la vista de la tabla
     int filaSeleccionadaVista = tablaBen.getSelectedRow();

@@ -1,6 +1,5 @@
-
 package igu;
-//hola
+
 import javax.swing.UIManager;
 
 public class Principal extends javax.swing.JFrame {

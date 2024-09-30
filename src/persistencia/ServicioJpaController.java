@@ -1,4 +1,5 @@
 package persistencia;
+
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -104,7 +105,8 @@ public class ServicioJpaController implements Serializable {
             em.close();
         }
     }
-
+    
+    
     // Método para obtener la cantidad total de registros en la tabla Servicio
     public int getServicioCount() {
         EntityManager em = getEntityManager();

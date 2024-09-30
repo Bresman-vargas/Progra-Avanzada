@@ -1,25 +1,12 @@
 package logica;
-
 import persistencia.ControladoraPersistencia;
-import persistencia.EntityManagerUtil; // Importación de EntityManagerUtil
 import java.util.List;
-import javax.persistence.EntityManager; // Importación de EntityManager
-import javax.persistence.EntityManagerFactory; // Importación de EntityManagerFactory
-import javax.swing.JOptionPane;
 
 
 public class Controladora {
 
     ControladoraPersistencia controlPersis = new ControladoraPersistencia();
-
-    public void agregar(String nombre, Integer edad, List<String> discapacidades, String detalles) {
-        Beneficiario ben = new Beneficiario();
-        ben.setNombre(nombre);
-        ben.setEdad(edad);
-        ben.setDiscapacidades(discapacidades);
-        ben.setDetallesAdicionales(detalles);
-        controlPersis.guardar(ben);
-    }
+    
 
     public List<Beneficiario> traerBeneficiarios() {
         return controlPersis.traerBeneficiarios();
@@ -81,32 +68,27 @@ public class Controladora {
     public List<Servicio> traerServicios() {
         return controlPersis.traerServicios();
     }
-    
-    // Método para asignar un servicio a un beneficiario
-    public boolean asignarServicioABeneficiario(Beneficiario beneficiario, Servicio servicio) {
-    AsignacionServicio asignacion = new AsignacionServicio(beneficiario, servicio);
-    
-    boolean resultado = controlPersis.guardarAsignacionServicio(asignacion); // Llamada al método de persistencia
 
-    if (resultado) {
-        JOptionPane.showMessageDialog(null, "El servicio se ha asignado correctamente al beneficiario.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-    } else {
-        JOptionPane.showMessageDialog(null, "Error al asignar el servicio.", "Error", JOptionPane.ERROR_MESSAGE);
+    public void agregarAsignacion(Asignacion nuevaAsignacion) {
+        controlPersis.agregarAsignacion(nuevaAsignacion);
     }
 
-    return resultado; // Retornar el resultado de la operación
-}
-    public List<AsignacionServicio> traerRelaciones() {
-    // Lógica para traer todas las relaciones de la base de datos
-    EntityManager em = EntityManagerUtil.getEntityManager();
-    List<AsignacionServicio> relaciones = em.createQuery("SELECT a FROM AsignacionServicio a", AsignacionServicio.class).getResultList();
-    em.close();
-    return relaciones;//sdsdasd
-}
+    public List<Asignacion> traerAsignaciones() {
+        return controlPersis.traerAsignaciones();
+    }
 
-
+    public void agregar(String nombre, Integer edad, List<String> discapacidades, String detalles) {
+        Beneficiario ben = new Beneficiario();
+        ben.setNombre(nombre);
+        ben.setEdad(edad);
+        ben.setDiscapacidades(discapacidades);
+        ben.setDetallesAdicionales(detalles);
+        
+        controlPersis.agregar(ben);
+     
+    }
     
-    
-    
-    
+    public void borrarAsig(long num_Assig) throws Exception {
+        controlPersis.borrarAsig(num_Assig);
+    }
 }

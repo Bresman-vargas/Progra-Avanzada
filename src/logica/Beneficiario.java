@@ -1,5 +1,4 @@
 package logica;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ public class Beneficiario implements Serializable {
     private int edad;
     
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> discapacidades;
+    private List<String> discapacidades = new ArrayList<>();
     
     private String detallesAdicionales;
 
@@ -31,6 +30,17 @@ public class Beneficiario implements Serializable {
     @OneToMany(mappedBy = "beneficiario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Servicio> servicios = new ArrayList<>(); // Inicializado como una lista vacía
     
+    // Constructor vacío (requerido por JPA)
+    public Beneficiario() {}
+
+    // Constructor con parámetros
+    public Beneficiario(String nombre, int edad, List<String> discapacidades, String detallesAdicionales) {
+        this.nombre = nombre;
+        this.edad = edad;
+        this.discapacidades = discapacidades;
+        this.detallesAdicionales = detallesAdicionales;
+    }
+
     // Getters y Setters
     public Long getId() {
         return id;
@@ -79,5 +89,11 @@ public class Beneficiario implements Serializable {
     public void setServicios(List<Servicio> servicios) {
         this.servicios = servicios;
     }
+
+    @Override
+    public String toString() {
+        return nombre + " (Edad: " + edad + ")"; // Cambia esto si deseas más información
+    }
 }
-//xd asdjgjk
+
+

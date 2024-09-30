@@ -1,13 +1,16 @@
-
 package igu;
-//hola
+
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.IntelliJTheme;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +27,7 @@ import logica.Servicio;
 import javax.swing.UIManager;
 import javax.swing.table.TableRowSorter;
 import logica.Beneficiario;
-import logica.AsignacionServicio;
+import logica.Asignacion;
 
 public class MenuServicios extends javax.swing.JFrame {
     private static final Color ACCENT_COLOR_LIGHT = new Color(50, 35, 62);
@@ -42,24 +45,10 @@ public class MenuServicios extends javax.swing.JFrame {
         setResizable(false);
         
         cargarTabla();
+        cargarTablaBeneficiario();
+        cargarTablaServicios();
+        cargarRelacionesEnTabla();
     }
-    /*private void cargarRelacionesEnTabla() {
-    // Obtener la lista de relaciones desde el controlador
-    List<AsignacionServicio> relaciones = control.traerRelaciones(); // Llama al método que trae las relaciones
-    DefaultTableModel modelo = (DefaultTableModel) tablaSerBen.getModel(); // Obtiene el modelo de la tabla
-    modelo.setRowCount(0); // Limpia la tabla antes de llenarla
-
-    // Llenar la tabla con las relaciones
-    for (AsignacionServicio asignacion : relaciones) {
-        Object[] fila = {
-            asignacion.getBeneficiario().getNombre(), // Asumiendo que Beneficiario tiene un método getNombre()
-            asignacion.getServicio().getNombre()       // Asumiendo que Servicio tiene un método getNombre()
-        };
-        modelo.addRow(fila); // Agrega la fila al modelo de la tabla
-    }
-}*/
-
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -93,25 +82,31 @@ public class MenuServicios extends javax.swing.JFrame {
         btnLimpiar = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tablaBen = new javax.swing.JTable();
+        tablaBenAsig = new javax.swing.JTable();
         jScrollPane5 = new javax.swing.JScrollPane();
-        tablaServiciosBen = new javax.swing.JTable();
+        tablaServiciosAsig = new javax.swing.JTable();
         jSeparator1 = new javax.swing.JSeparator();
         txtAsigSer = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnLimpiarAsig = new javax.swing.JButton();
         buscarSer = new javax.swing.JTextField();
         buscarBen = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
+        btnAgregarAsig = new javax.swing.JButton();
         txtAsigBen = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        tablaSerBen = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        tablaAsig = new javax.swing.JTable();
+        btnBorrarAsig = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        txtAsigSerBorrar = new javax.swing.JTextField();
+        txtAsigBenBorrar = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        themeSer = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menú Servicios");
@@ -271,8 +266,8 @@ public class MenuServicios extends javax.swing.JFrame {
 
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tablaBen.setFont(new java.awt.Font("Lato", 0, 12)); // NOI18N
-        tablaBen.setModel(new javax.swing.table.DefaultTableModel(
+        tablaBenAsig.setFont(new java.awt.Font("Lato", 0, 12)); // NOI18N
+        tablaBenAsig.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -280,20 +275,20 @@ public class MenuServicios extends javax.swing.JFrame {
 
             }
         ));
-        tablaBen.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        tablaBen.setFillsViewportHeight(true);
-        tablaBen.setFocusable(false);
-        tablaBen.setRequestFocusEnabled(false);
-        tablaBen.setRowHeight(25);
-        tablaBen.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tablaBen.setShowGrid(false);
-        tablaBen.setShowHorizontalLines(true);
-        tablaBen.setShowVerticalLines(true);
-        jScrollPane3.setViewportView(tablaBen);
+        tablaBenAsig.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tablaBenAsig.setFillsViewportHeight(true);
+        tablaBenAsig.setFocusable(false);
+        tablaBenAsig.setRequestFocusEnabled(false);
+        tablaBenAsig.setRowHeight(25);
+        tablaBenAsig.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tablaBenAsig.setShowGrid(false);
+        tablaBenAsig.setShowHorizontalLines(true);
+        tablaBenAsig.setShowVerticalLines(true);
+        jScrollPane3.setViewportView(tablaBenAsig);
 
         jPanel4.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 490, 400));
 
-        tablaServiciosBen.setModel(new javax.swing.table.DefaultTableModel(
+        tablaServiciosAsig.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -304,36 +299,37 @@ public class MenuServicios extends javax.swing.JFrame {
 
             }
         ));
-        tablaServiciosBen.setFillsViewportHeight(true);
-        tablaServiciosBen.setFocusable(false);
-        jScrollPane5.setViewportView(tablaServiciosBen);
+        tablaServiciosAsig.setFillsViewportHeight(true);
+        tablaServiciosAsig.setFocusable(false);
+        tablaServiciosAsig.setRowHeight(25);
+        tablaServiciosAsig.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tablaServiciosAsig.setShowHorizontalLines(true);
+        tablaServiciosAsig.setShowVerticalLines(true);
+        jScrollPane5.setViewportView(tablaServiciosAsig);
 
         jPanel4.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 150, -1, 400));
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jPanel4.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 150, 10, 400));
 
+        txtAsigSer.setEditable(false);
         txtAsigSer.setDisabledTextColor(new java.awt.Color(255, 255, 255));
-        txtAsigSer.setEnabled(false);
         jPanel4.add(txtAsigSer, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, 300, 40));
 
-        jButton2.setText("Relacionar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        jPanel4.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 50, 100, 40));
-
-        jButton3.setText("Limpiar");
-        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnLimpiarAsig.setText("Limpiar");
+        btnLimpiarAsig.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                jButton3MousePressed(evt);
+                btnLimpiarAsigMousePressed(evt);
             }
         });
-        jPanel4.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 50, 100, 40));
-        jPanel4.add(buscarSer, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 110, 290, -1));
-        jPanel4.add(buscarBen, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 110, 290, -1));
+        btnLimpiarAsig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarAsigActionPerformed(evt);
+            }
+        });
+        jPanel4.add(btnLimpiarAsig, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 50, 100, 40));
+        jPanel4.add(buscarSer, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 110, 300, -1));
+        jPanel4.add(buscarBen, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 110, 300, -1));
 
         jLabel7.setText("Nombre Servicio");
         jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, 170, -1));
@@ -342,31 +338,35 @@ public class MenuServicios extends javax.swing.JFrame {
         jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 160, -1));
 
         jLabel9.setText("Buscar");
-        jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 110, 50, 25));
+        jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 110, 50, 20));
 
         jLabel10.setText("Buscar");
-        jPanel4.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 110, 50, 25));
+        jPanel4.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 110, 50, 20));
 
-        jButton4.setText("jButton4");
-        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnAgregarAsig.setBackground(UIManager.getColor("Component.accentColor"));
+        btnAgregarAsig.setForeground(UIManager.getColor("Component.foreground"));
+        btnAgregarAsig.setText("Relacionar");
+        btnAgregarAsig.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton4MouseClicked(evt);
+                btnAgregarAsigMouseClicked(evt);
             }
         });
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnAgregarAsig.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnAgregarAsigActionPerformed(evt);
             }
         });
-        jPanel4.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 60, -1, -1));
+        jPanel4.add(btnAgregarAsig, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 50, 220, 40));
 
+        txtAsigBen.setEditable(false);
         txtAsigBen.setDisabledTextColor(new java.awt.Color(255, 255, 255));
-        txtAsigBen.setEnabled(false);
         jPanel4.add(txtAsigBen, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 300, 40));
 
         jTabbedPane1.addTab("Asignar Servicio a Beneficiario", jPanel4);
 
-        tablaSerBen.setModel(new javax.swing.table.DefaultTableModel(
+        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        tablaAsig.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -377,42 +377,53 @@ public class MenuServicios extends javax.swing.JFrame {
 
             }
         ));
-        jScrollPane4.setViewportView(tablaSerBen);
+        jScrollPane4.setViewportView(tablaAsig);
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 1010, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(53, 53, 53)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(120, Short.MAX_VALUE))
-        );
+        jPanel5.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 149, 980, 400));
+
+        btnBorrarAsig.setText("Borrar");
+        btnBorrarAsig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarAsigActionPerformed(evt);
+            }
+        });
+        jPanel5.add(btnBorrarAsig, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 50, 100, 38));
+        jPanel5.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 110, 290, -1));
+
+        jLabel11.setText("Buscar");
+        jPanel5.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 110, 51, 20));
+
+        jLabel12.setText("Nombre Beneficiario");
+        jPanel5.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 160, -1));
+
+        txtAsigSerBorrar.setEditable(false);
+        txtAsigSerBorrar.setDisabledTextColor(new java.awt.Color(255, 255, 255));
+        jPanel5.add(txtAsigSerBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, 300, 40));
+
+        txtAsigBenBorrar.setEditable(false);
+        txtAsigBenBorrar.setDisabledTextColor(new java.awt.Color(255, 255, 255));
+        jPanel5.add(txtAsigBenBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 300, 40));
+
+        jLabel13.setText("Nombre Servicio");
+        jPanel5.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, 170, -1));
 
         jTabbedPane1.addTab("Servicios Asignados", jPanel5);
 
         jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 1050, 610));
 
-        jButton1.setText("Theme");
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        themeSer.setText("Theme");
+        themeSer.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        themeSer.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                jButton1MousePressed(evt);
+                themeSerMousePressed(evt);
             }
         });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        themeSer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                themeSerActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 40, -1, -1));
+        jPanel1.add(themeSer, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 40, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -428,8 +439,6 @@ public class MenuServicios extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private boolean enModoEdicion = false;
-    private int filaSeleccionada = -1;
     
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         txtServicio.requestFocusInWindow();
@@ -454,7 +463,10 @@ public class MenuServicios extends javax.swing.JFrame {
         txtResponsable.setText("");
         txtDetallesServicio.setText("");
     }//GEN-LAST:event_btnLimpiarActionPerformed
-
+    
+    private boolean enModoEdicion = false;
+    private int filaSeleccionada = -1;  
+    
     private void btnEditarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarMouseClicked
         if (!enModoEdicion) {
             // Obtener el índice de la fila seleccionada
@@ -506,6 +518,7 @@ public class MenuServicios extends javax.swing.JFrame {
                 cargarTabla();
                 cargarTablaBeneficiario();
                 cargarTablaServicios();
+                cargarRelacionesEnTabla();
 
                 // Mostrar un mensaje de éxito
                 JOptionPane.showMessageDialog(this, "Record updated successfully.");
@@ -531,13 +544,14 @@ public class MenuServicios extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEditarMouseClicked
 
+    private int filaSeleccionadaServicio = -1;
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // Obtener el índice de la fila seleccionada
-        int filaSeleccionadaVista = tablaServicios.getSelectedRow();
+        int filaSeleccionadaServicio = tablaServicios.getSelectedRow();
         // Obtener el índice de la fila seleccionada
 
-        if ( filaSeleccionadaVista != -1) {
-            int filaSeleccionadaModelo = tablaServicios.convertRowIndexToModel(filaSeleccionadaVista);
+        if (filaSeleccionadaServicio != -1) {
+            int filaSeleccionadaModelo = tablaServicios.convertRowIndexToModel(filaSeleccionadaServicio);
             int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar este servicio?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
             if (confirmacion == JOptionPane.YES_OPTION) {
@@ -547,36 +561,12 @@ public class MenuServicios extends javax.swing.JFrame {
                     cargarTabla();
                     cargarTablaBeneficiario();
                     cargarTablaServicios();
+                    cargarRelacionesEnTabla(); //no hace un puta mierda
                     mostrarMensaje("Servicio eliminado exitosamente.", "Info", "Éxito");
                 } catch (Exception e) {
                     mostrarMensaje("Ocurrió un error al eliminar el servicio: " + e.getMessage(), "Error", "Error");
                 }
             } else {
-
-                mostrarMensaje("Eliminación cancelada.", "Info", "Cancelación");
-            }
-            tablaServicios.clearSelection();
-        } else {
-            mostrarMensaje("No se ha seleccionado ninguna fila.", "Error", "Error");
-        }
-
-        if (filaSeleccionada != -1) {
-            int filaSeleccionadaModelo = tablaServicios.convertRowIndexToModel(filaSeleccionadaVista);
-            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar este servicio?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-
-            if (confirmacion == JOptionPane.YES_OPTION) {
-                try {
-                    long num_Servicio = Long.parseLong(String.valueOf(tablaServicios.getValueAt(filaSeleccionadaModelo, 0)));
-                    control.borrarServicio(num_Servicio);
-                    cargarTabla();
-                    cargarTablaBeneficiario();
-                    cargarTablaServicios();
-                    mostrarMensaje("Servicio eliminado exitosamente.", "Info", "Éxito");
-                } catch (Exception e) {
-                    mostrarMensaje("Ocurrió un error al eliminar el servicio: " + e.getMessage(), "Error", "Error");
-                }
-            } else {
-
                 mostrarMensaje("Eliminación cancelada.", "Info", "Cancelación");
             }
             tablaServicios.clearSelection();
@@ -614,6 +604,7 @@ public class MenuServicios extends javax.swing.JFrame {
             cargarTabla();
             cargarTablaBeneficiario();
             cargarTablaServicios();
+            cargarRelacionesEnTabla();
 
         } catch (Exception e) {
             mostrarMensaje("An unexpected error occurred: " + e.getMessage(), "Error", "Error");
@@ -621,9 +612,9 @@ public class MenuServicios extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void themeSerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_themeSerActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_themeSerActionPerformed
 
     private void txtDetallesServicioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDetallesServicioKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_TAB) {
@@ -636,7 +627,7 @@ public class MenuServicios extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtResponsableActionPerformed
 
-    private void jButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MousePressed
+    private void themeSerMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_themeSerMousePressed
         try {
         // Verificar el Look and Feel actual y cambiar de tema
         if (UIManager.getLookAndFeel().getClass().getName().equals("com.formdev.flatlaf.FlatLightLaf")) {
@@ -666,27 +657,23 @@ public class MenuServicios extends javax.swing.JFrame {
         e.printStackTrace();
         // Aquí podrías mostrar un mensaje al usuario si ocurre un error
     }
-    }//GEN-LAST:event_jButton1MousePressed
+    }//GEN-LAST:event_themeSerMousePressed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnAgregarAsigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarAsigActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_btnAgregarAsigActionPerformed
 
     private int filaSeleccionadaBen = -1;
     private int filaSeleccionadaSer = -1;
     
-    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+    private void btnAgregarAsigMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarAsigMouseClicked
         // TODO add your handling code here:
-    filaSeleccionadaBen = tablaBen.getSelectedRow();
-    filaSeleccionadaSer = tablaServiciosBen.getSelectedRow();
+    filaSeleccionadaBen = tablaBenAsig.getSelectedRow();
+    filaSeleccionadaSer = tablaServiciosAsig.getSelectedRow();
 
     if (filaSeleccionadaBen != -1 && filaSeleccionadaSer != -1) {
-        long num_Beneficiario = Long.parseLong(String.valueOf(tablaBen.getValueAt(filaSeleccionadaBen, 0)));
-        long num_Servicio = Long.parseLong(String.valueOf(tablaServiciosBen.getValueAt(filaSeleccionadaSer, 0)));
+        long num_Beneficiario = Long.parseLong(String.valueOf(tablaBenAsig.getValueAt(filaSeleccionadaBen, 0)));
+        long num_Servicio = Long.parseLong(String.valueOf(tablaServiciosAsig.getValueAt(filaSeleccionadaSer, 0)));
 
         // Obtener los objetos Beneficiario y Servicio a partir de los IDs
         this.beneficiario = control.traerBeneficiario(num_Beneficiario);
@@ -695,34 +682,101 @@ public class MenuServicios extends javax.swing.JFrame {
         // Actualizar los campos de texto en la interfaz
         txtAsigBen.setText(beneficiario.getNombre());
         txtAsigSer.setText(servicio.getNombre());
+        
+        String asigBen = txtAsigBen.getText().trim();
+        String asigSer = txtAsigSer.getText().trim();
 
-        // Llamar al método para asignar el servicio al beneficiario
-        boolean exito = control.asignarServicioABeneficiario(beneficiario, servicio);
-        
-        if (exito) {
-            JOptionPane.showMessageDialog(this, "Se relacionaron correctamente.", "Info", JOptionPane.INFORMATION_MESSAGE);
-            cargarRelacionesEnTabla(); // Cargar de nuevo las relaciones después de una asignación exitosa
+        // Verificar si alguno de los campos está vacío
+        if (asigBen.isEmpty() || asigSer.isEmpty()) {
+            // Mostrar un mensaje de error utilizando el método mostrarMensaje
+            mostrarMensaje("Error: Falta completar uno o más campos.", "Error", "Campos vacíos");
         } else {
-            JOptionPane.showMessageDialog(this, "Hubo un error al relacionar.", "Error", JOptionPane.ERROR_MESSAGE);
+            // Mostrar mensaje de confirmación antes de agregar
+            
+            int respuesta = JOptionPane.showConfirmDialog(
+                null, 
+                "¿Está seguro de que desea asignar el beneficiario " + asigBen + " al servicio " + asigSer + "?", 
+                "Confirmar asignación", 
+                JOptionPane.YES_NO_OPTION
+            );
+
+            // Si el usuario confirma (presiona Sí), realizar la asignación
+            if (respuesta == JOptionPane.YES_OPTION) {
+                // Crear una nueva instancia de Asignacion
+                
+                Asignacion nuevaAsignacion = new Asignacion();
+                nuevaAsignacion.setBeneficiario(beneficiario); // Establecer el beneficiario
+                nuevaAsignacion.setServicios(Collections.singletonList(servicio)); // Establecer el servicio
+                
+                try {
+                    control.agregarAsignacion(nuevaAsignacion); // Crear la asignación en la base de datos
+                    cargarRelacionesEnTabla();
+                    System.out.println("Asignación guardada exitosamente en la base de datos.");
+                } catch (Exception e) {
+                    System.out.println("Error al asignar el beneficiario: " + e.getMessage());
+                }
+               
+                mostrarMensaje("Beneficiario " + asigBen + " asignado al servicio " + asigSer, "Info", "Asignación Exitosa");
+            }
         }
-        
     } else {
         // Mostrar un mensaje si no se seleccionó ninguna fila
         JOptionPane.showMessageDialog(this, "Seleccione un beneficiario y un servicio.", "Error", JOptionPane.ERROR_MESSAGE);
-    }  
-        
-      
-    }//GEN-LAST:event_jButton4MouseClicked
+    }
+    }//GEN-LAST:event_btnAgregarAsigMouseClicked
 
     private void txtServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtServicioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtServicioActionPerformed
 
-    private void jButton3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MousePressed
+    private void btnLimpiarAsigMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLimpiarAsigMousePressed
         // TODO add your handling code here:
         txtAsigBen.setText("");
         txtAsigSer.setText("");
-    }//GEN-LAST:event_jButton3MousePressed
+        buscarBen.setText("");
+        buscarSer.setText("");      
+    }//GEN-LAST:event_btnLimpiarAsigMousePressed
+
+    private void btnLimpiarAsigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarAsigActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLimpiarAsigActionPerformed
+
+    private int filaSeleccionadaAsig = -1;
+    private void btnBorrarAsigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarAsigActionPerformed
+        int filaSeleccionadaAsig = tablaAsig.getSelectedRow();
+
+        if (filaSeleccionadaAsig != -1) {
+            // Convertir el índice de la vista al índice del modelo
+            int filaSeleccionadaModelo = tablaAsig.convertRowIndexToModel(filaSeleccionadaAsig);
+
+            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar este beneficiario?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                try {
+                    // Obtener el ID del beneficiario desde el modelo de la tabla
+                    long num_Assig = Long.parseLong(String.valueOf(tablaAsig.getModel().getValueAt(filaSeleccionadaModelo, 0)));
+
+                    // Llamar al método para eliminar el beneficiario
+                    control.borrarAsig(num_Assig); 
+
+                    // Recargar la tabla después de la eliminación
+                    cargarRelacionesEnTabla();
+
+                    mostrarMensaje("Beneficiario eliminado exitosamente.", "Info", "Éxito");
+                } catch (Exception e) {
+                    mostrarMensaje("Ocurrió un error al eliminar el beneficiario: " + e.getMessage(), "Error", "Error");
+                    e.printStackTrace();
+                }
+            } else {
+                mostrarMensaje("Eliminación cancelada.", "Info", "Cancelación");
+            }
+
+            // Limpiar la selección de la tabla
+            tablaAsig.clearSelection();
+        } else {
+            mostrarMensaje("No se ha seleccionado ninguna fila.", "Error", "Error");
+        }
+    }//GEN-LAST:event_btnBorrarAsigActionPerformed
 
     
     /**
@@ -730,20 +784,22 @@ public class MenuServicios extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarAsig;
+    private javax.swing.JButton btnBorrarAsig;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
+    private javax.swing.JButton btnLimpiarAsig;
     private javax.swing.JTextField buscarBen;
     private javax.swing.JTextField buscarSer;
     private javax.swing.JTextField buscarTxt;
     private javax.swing.JLabel irAtrasBen;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -764,12 +820,16 @@ public class MenuServicios extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable tablaBen;
-    private javax.swing.JTable tablaSerBen;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tablaAsig;
+    private javax.swing.JTable tablaBenAsig;
     private javax.swing.JTable tablaServicios;
-    private javax.swing.JTable tablaServiciosBen;
+    private javax.swing.JTable tablaServiciosAsig;
+    private javax.swing.JButton themeSer;
     private javax.swing.JTextField txtAsigBen;
+    private javax.swing.JTextField txtAsigBenBorrar;
     private javax.swing.JTextField txtAsigSer;
+    private javax.swing.JTextField txtAsigSerBorrar;
     private javax.swing.JTextArea txtDetallesServicio;
     private javax.swing.JTextField txtResponsable;
     private javax.swing.JTextField txtServicio;
@@ -906,21 +966,21 @@ public class MenuServicios extends javax.swing.JFrame {
         }
 
         // Asignar el modelo a la tabla
-        tablaBen.setModel(modeloTabla);
+        tablaBenAsig.setModel(modeloTabla);
         // Evitar que las columnas se reordenen
-        tablaBen.getTableHeader().setReorderingAllowed(false);
+        tablaBenAsig.getTableHeader().setReorderingAllowed(false);
 
         // Evitar que las columnas se redimensionen
-        tablaBen.getTableHeader().setResizingAllowed(false);
+        tablaBenAsig.getTableHeader().setResizingAllowed(false);
 
         // Configurar el TableRowSorter para habilitar la funcionalidad de filtrar y ordenar
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modeloTabla);
-        tablaBen.setRowSorter(sorter);
+        tablaBenAsig.setRowSorter(sorter);
    
 
         // Ajustar el ancho de las columnas de la tabla si es necesario
-        ajustarAnchoColumnas(tablaBen);
-        centrarColumnas(tablaBen, new int[]{0});
+        ajustarAnchoColumnas(tablaBenAsig);
+        centrarColumnas(tablaBenAsig, new int[]{0});
         
         // Configuración de filtrado mediante el campo de texto (buscarTxt)
         buscarBen.addKeyListener(new KeyAdapter() {
@@ -935,6 +995,17 @@ public class MenuServicios extends javax.swing.JFrame {
                     // Aplicar el filtro (insensible a mayúsculas/minúsculas)
                     sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
                     btnEliminar.setEnabled(false); // Deshabilitar el botón eliminar mientras se filtra
+                }
+            }
+        });
+        
+        
+        btnLimpiarAsig.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tablaBenAsig.getSelectionModel().clearSelection();  // Quitar la selección de la tabla
+                if (sorter != null) {
+                sorter.setRowFilter(null); // Quitar todos los filtros
                 }
             }
         });
@@ -957,6 +1028,7 @@ public class MenuServicios extends javax.swing.JFrame {
         List <Servicio> ListarServicios = control.traerServicios();
         
         
+        
         if(ListarServicios != null){
             for(Servicio ser : ListarServicios){
                 Object[] objeto = {ser.getId(),ser.getNombre(), 
@@ -965,20 +1037,19 @@ public class MenuServicios extends javax.swing.JFrame {
                modeloTabla.addRow(objeto);
             }
         }
-        tablaServiciosBen.setModel(modeloTabla);
+        tablaServiciosAsig.setModel(modeloTabla);
         // Evitar que las columnas se reordenen
-        tablaServiciosBen.getTableHeader().setReorderingAllowed(false);
+        tablaServiciosAsig.getTableHeader().setReorderingAllowed(false);
 
         // Evitar que las columnas se redimensionen
-        tablaServiciosBen.getTableHeader().setResizingAllowed(false);
+        tablaServiciosAsig.getTableHeader().setResizingAllowed(false);
 
-        
-        ajustarAnchoColumnas(tablaServiciosBen);
-        centrarColumnas(tablaServiciosBen, new int[]{0});
-        
         // Configurar el TableRowSorter para habilitar la funcionalidad de filtrar y ordenar
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modeloTabla);
-        tablaServiciosBen.setRowSorter(sorter);
+        tablaServiciosAsig.setRowSorter(sorter);
+        
+        ajustarAnchoColumnas(tablaServiciosAsig);
+        centrarColumnas(tablaServiciosAsig, new int[]{0});
         
         // Configuración de filtrado mediante el campo de texto (buscarTxt)
         buscarSer.addKeyListener(new KeyAdapter() {
@@ -996,36 +1067,74 @@ public class MenuServicios extends javax.swing.JFrame {
                 }
             }
         });
-       
+        
+        btnLimpiarAsig.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tablaServiciosAsig.getSelectionModel().clearSelection();  // Quitar la selección de la tabla
+                if (sorter != null) {
+                sorter.setRowFilter(null); // Quitar todos los filtros
+                }
+            }
+        });
         
     }
     
     private void cargarRelacionesEnTabla() {
-    // Obtener la lista de relaciones desde el controlador
-    List<AsignacionServicio> relaciones = control.traerRelaciones(); // Llama al método que trae las relaciones
-    DefaultTableModel modelo = (DefaultTableModel) tablaSerBen.getModel(); // Obtiene el modelo de la tabla
-    modelo.setRowCount(0); // Limpia la tabla antes de llenarla
-
-    // Llenar la tabla con las relaciones
-    for (AsignacionServicio asignacion : relaciones) {
-        Object[] fila = {
-            asignacion.getBeneficiario() != null ? asignacion.getBeneficiario().getNombre() : "N/A", // Manejo de null
-            asignacion.getServicio() != null ? asignacion.getServicio().getNombre() : "N/A" // Manejo de null
+        DefaultTableModel modeloTabla = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false; // Evitar que las celdas sean editables
+        }
         };
-        modelo.addRow(fila); // Agrega la fila al modelo de la tabla
+
+        // Establecemos los nombres de las columnas
+        String[] titulos = {"Id-Asig", "Beneficiario","Discapacidades", "Edad", "Servicio", "Responsable"};
+        modeloTabla.setColumnIdentifiers(titulos);
+
+        List<Asignacion> listarAsignaciones = control.traerAsignaciones();
+
+        if (listarAsignaciones != null) {
+            for (Asignacion asig : listarAsignaciones) {
+                // Obtener el nombre del beneficiario
+                String beneficiarioNombre = asig.getBeneficiario() != null ? asig.getBeneficiario().getNombre() : "N/A";
+
+                // Obtener la edad del beneficiario
+                String edadBeneficiario = asig.getBeneficiario() != null ? String.valueOf(asig.getBeneficiario().getEdad()) : "N/A";
+
+                // Obtener las discapacidades del beneficiario como lista
+                List<String> discapacidades = asig.getBeneficiario() != null ? asig.getBeneficiario().getDiscapacidades() : new ArrayList<>();
+                String beneficiarioDiscapacidades = "N/A";
+                if (!discapacidades.isEmpty()) {
+                    beneficiarioDiscapacidades = String.join(", ", discapacidades);
+                }
+
+                // Obtener el nombre del servicio y el responsable (solo el primero)
+                String servicioNombre = "N/A";
+                String responsable = "N/A";
+                if (asig.getServicios() != null && !asig.getServicios().isEmpty()) {
+                    Servicio primerServicio = asig.getServicios().get(0);
+                    servicioNombre = primerServicio.getNombre(); // Mostrar solo el primer servicio
+                    responsable = primerServicio.getResponsable(); // Obtener el responsable del servicio
+                }
+
+                // Crear un objeto con los datos para la tabla
+                Object[] objeto = {asig.getId(),  beneficiarioNombre, beneficiarioDiscapacidades, edadBeneficiario, servicioNombre, responsable};
+                modeloTabla.addRow(objeto);
+            }
+        }
+
+        tablaAsig.setModel(modeloTabla);
+
+        // Evitar que las columnas se reordenen
+        tablaAsig.getTableHeader().setReorderingAllowed(false);
+        // Evitar que las columnas se redimensionen
+        tablaAsig.getTableHeader().setResizingAllowed(false);
+
+        ajustarAnchoColumnas(tablaAsig);
+        centrarColumnas(tablaAsig, new int[]{0}); // Puedes ajustar esto según sea necesario
+        centrarColumnas(tablaAsig, new int[]{3});
+    
     }
-
-    // Ajustar el ancho de las columnas de la tabla si es necesario
-    ajustarAnchoColumnas(tablaSerBen);
-    centrarColumnas(tablaSerBen, new int[]{0, 1}); // Centrar las columnas que necesites
 }
-   /* private void inicializarTablaRelaciones() {
-    DefaultTableModel modelo = new DefaultTableModel();
-    modelo.addColumn("Beneficiario");
-    modelo.addColumn("Servicio");
-    tablaSerBen.setModel(modelo);
-}*/
 
-
-
-}

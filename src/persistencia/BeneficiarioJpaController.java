@@ -1,5 +1,4 @@
 package persistencia;
-
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -13,7 +12,7 @@ import logica.Beneficiario;
 public class BeneficiarioJpaController implements Serializable {
 
     private EntityManagerFactory emf = null;
-//dassa
+
     public BeneficiarioJpaController() {
         this.emf = Persistence.createEntityManagerFactory("SistemaDiscapacidadPU");
     }
