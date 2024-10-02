@@ -31,6 +31,12 @@ public class Servicio implements Serializable {
         this.descripcion = descripcion;
         this.beneficiario = beneficiario;
     }
+    
+    public Servicio(String nombre, String responsable, String descripcion) {
+        this.nombre = nombre;
+        this.responsable = responsable;
+        this.descripcion = descripcion;
+    }
 
     // Getters y Setters
 

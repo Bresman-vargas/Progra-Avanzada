@@ -9,6 +9,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +27,7 @@ import logica.Controladora;
 import logica.Servicio;
 import javax.swing.UIManager;
 import javax.swing.table.TableRowSorter;
+import jtable_a_excel.ExportarExcel;
 import logica.Beneficiario;
 import logica.Asignacion;
 
@@ -80,6 +82,7 @@ public class MenuServicios extends javax.swing.JFrame {
         btnEditar = new javax.swing.JButton();
         buscarTxt = new javax.swing.JTextField();
         btnLimpiar = new javax.swing.JButton();
+        reporteExel1 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaBenAsig = new javax.swing.JTable();
@@ -100,13 +103,10 @@ public class MenuServicios extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         tablaAsig = new javax.swing.JTable();
         btnBorrarAsig = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        BuscarAsig = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        txtAsigSerBorrar = new javax.swing.JTextField();
-        txtAsigBenBorrar = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
-        themeSer = new javax.swing.JButton();
+        reporteExel = new javax.swing.JButton();
+        btnTheme = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menú Servicios");
@@ -160,11 +160,6 @@ public class MenuServicios extends javax.swing.JFrame {
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtServicio.setDisabledTextColor(new java.awt.Color(255, 51, 51));
-        txtServicio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtServicioActionPerformed(evt);
-            }
-        });
         jPanel3.add(txtServicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 340, 40));
 
         txtDetallesServicio.setColumns(20);
@@ -209,12 +204,6 @@ public class MenuServicios extends javax.swing.JFrame {
             }
         });
         jPanel3.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 120, 90, 40));
-
-        txtResponsable.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtResponsableActionPerformed(evt);
-            }
-        });
         jPanel3.add(txtResponsable, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 50, 260, 40));
 
         jLabel3.setText("Nombre Servicio:");
@@ -249,23 +238,21 @@ public class MenuServicios extends javax.swing.JFrame {
                 btnEditarMouseClicked(evt);
             }
         });
-        btnEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarActionPerformed(evt);
-            }
-        });
         jPanel3.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 120, 140, 40));
         jPanel3.add(buscarTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 180, 300, -1));
 
         btnLimpiar.setText("Limpiar");
         btnLimpiar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnLimpiar.setFocusable(false);
-        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+        jPanel3.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 90, 40));
+
+        reporteExel1.setText("Descargar");
+        reporteExel1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLimpiarActionPerformed(evt);
+                reporteExel1ActionPerformed(evt);
             }
         });
-        jPanel3.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 90, 40));
+        jPanel3.add(reporteExel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 140, -1));
 
         jTabbedPane1.addTab("Añadir Nuevo Servicio", jPanel3);
 
@@ -327,11 +314,6 @@ public class MenuServicios extends javax.swing.JFrame {
                 btnLimpiarAsigMousePressed(evt);
             }
         });
-        btnLimpiarAsig.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLimpiarAsigActionPerformed(evt);
-            }
-        });
         jPanel4.add(btnLimpiarAsig, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 50, 100, 40));
         jPanel4.add(buscarSer, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 110, 300, -1));
         jPanel4.add(buscarBen, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 110, 300, -1));
@@ -356,11 +338,6 @@ public class MenuServicios extends javax.swing.JFrame {
                 btnAgregarAsigMouseClicked(evt);
             }
         });
-        btnAgregarAsig.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarAsigActionPerformed(evt);
-            }
-        });
         jPanel4.add(btnAgregarAsig, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 50, 220, 40));
 
         txtAsigBen.setEditable(false);
@@ -382,53 +359,49 @@ public class MenuServicios extends javax.swing.JFrame {
 
             }
         ));
+        tablaAsig.setRowHeight(25);
+        tablaAsig.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tablaAsig.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tablaAsig.setShowHorizontalLines(true);
+        tablaAsig.setShowVerticalLines(true);
         jScrollPane4.setViewportView(tablaAsig);
 
-        jPanel5.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 149, 980, 400));
+        jPanel5.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 990, 400));
 
+        btnBorrarAsig.setBackground(UIManager.getColor("Component.accentColor"));
+        btnBorrarAsig.setForeground(UIManager.getColor("Component.foreground"));
         btnBorrarAsig.setText("Borrar");
         btnBorrarAsig.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBorrarAsigActionPerformed(evt);
             }
         });
-        jPanel5.add(btnBorrarAsig, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 50, 100, 38));
-        jPanel5.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 110, 290, -1));
+        jPanel5.add(btnBorrarAsig, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 50, 210, 40));
+        jPanel5.add(BuscarAsig, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 110, 290, -1));
 
         jLabel11.setText("Buscar");
-        jPanel5.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 110, 51, 20));
+        jPanel5.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 110, 51, 20));
 
-        jLabel12.setText("Nombre Beneficiario");
-        jPanel5.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 160, -1));
-
-        txtAsigSerBorrar.setEditable(false);
-        txtAsigSerBorrar.setDisabledTextColor(new java.awt.Color(255, 255, 255));
-        jPanel5.add(txtAsigSerBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, 300, 40));
-
-        txtAsigBenBorrar.setEditable(false);
-        txtAsigBenBorrar.setDisabledTextColor(new java.awt.Color(255, 255, 255));
-        jPanel5.add(txtAsigBenBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 300, 40));
-
-        jLabel13.setText("Nombre Servicio");
-        jPanel5.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, 170, -1));
+        reporteExel.setText("Descargar");
+        reporteExel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reporteExelActionPerformed(evt);
+            }
+        });
+        jPanel5.add(reporteExel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 160, 30));
 
         jTabbedPane1.addTab("Servicios Asignados", jPanel5);
 
         jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 1050, 610));
 
-        themeSer.setText("Theme");
-        themeSer.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        themeSer.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnTheme.setText("Theme");
+        btnTheme.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnTheme.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                themeSerMousePressed(evt);
+                btnThemeMousePressed(evt);
             }
         });
-        themeSer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                themeSerActionPerformed(evt);
-            }
-        });
-        jPanel1.add(themeSer, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 40, -1, -1));
+        jPanel1.add(btnTheme, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 40, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -463,12 +436,6 @@ public class MenuServicios extends javax.swing.JFrame {
 
         this.dispose();
     }//GEN-LAST:event_irAtrasBenMouseClicked
-
-    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        txtServicio.setText("");
-        txtResponsable.setText("");
-        txtDetallesServicio.setText("");
-    }//GEN-LAST:event_btnLimpiarActionPerformed
     
     private boolean enModoEdicion = false;
     private int filaSeleccionada = -1;  
@@ -499,7 +466,7 @@ public class MenuServicios extends javax.swing.JFrame {
                 enModoEdicion = true;
             } else {
                 // Mostrar un mensaje si no hay ninguna fila seleccionada
-                JOptionPane.showMessageDialog(this, "No row selected. Please select a row to edit.", "Error", JOptionPane.ERROR_MESSAGE);
+                mostrarMensaje("No se ha seleccionado ninguna fila. Por favor, seleccione una fila para editar.", "Error", "Error");
             }
         } else {
             // Si estamos en modo edición, validar y guardar los cambios
@@ -511,7 +478,8 @@ public class MenuServicios extends javax.swing.JFrame {
 
                 // Verificar si los campos obligatorios están vacíos
                 if (servicioNombre.isEmpty() || responsable.isEmpty() || detalles.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "All fields must be filled out.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                    mostrarMensaje("Todos los campos deben ser completos.", "Error de Entrada", "Error");
+
                     return; // Salir del método para evitar acciones posteriores
                 }
 
@@ -527,7 +495,8 @@ public class MenuServicios extends javax.swing.JFrame {
                 cargarRelacionesEnTabla();
 
                 // Mostrar un mensaje de éxito
-                JOptionPane.showMessageDialog(this, "Record updated successfully.");
+                mostrarMensaje("Registro actualizado con éxito.", "Éxito", "Información");
+
 
                 // Limpiar los campos de texto después de guardar los cambios
                 txtServicio.setText("");
@@ -550,11 +519,10 @@ public class MenuServicios extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEditarMouseClicked
 
-    private int filaSeleccionadaServicio = -1;
+    
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // Obtener el índice de la fila seleccionada
         int filaSeleccionadaServicio = tablaServicios.getSelectedRow();
-        // Obtener el índice de la fila seleccionada
 
         if (filaSeleccionadaServicio != -1) {
             int filaSeleccionadaModelo = tablaServicios.convertRowIndexToModel(filaSeleccionadaServicio);
@@ -562,15 +530,27 @@ public class MenuServicios extends javax.swing.JFrame {
 
             if (confirmacion == JOptionPane.YES_OPTION) {
                 try {
+                    // Obtener el ID del servicio seleccionado
                     long num_Servicio = Long.parseLong(String.valueOf(tablaServicios.getValueAt(filaSeleccionadaModelo, 0)));
-                    control.borrarServicio(num_Servicio);
-                    cargarTabla();
-                    cargarTablaBeneficiario();
-                    cargarTablaServicios();
-                    cargarRelacionesEnTabla(); //no hace un puta mierda
-                    mostrarMensaje("Servicio eliminado exitosamente.", "Info", "Éxito");
+
+                    // Verificar si existen asignaciones relacionadas con el servicio
+                    List<Asignacion> asignacionesRelacionadas = control.obtenerAsignacionesPorServicio(num_Servicio);
+
+                    if (asignacionesRelacionadas.isEmpty()) {
+                        // No hay asignaciones, proceder con la eliminación
+                        control.borrarServicio(num_Servicio);
+                        cargarTabla();
+                        cargarTablaBeneficiario();
+                        cargarTablaServicios();
+                        mostrarMensaje("Servicio eliminado exitosamente.", "Info", "Éxito");
+                    } else {
+                        // Existen asignaciones activas, no se puede eliminar el servicio
+                        mostrarMensaje("No se puede eliminar este servicio porque tiene asignaciones activas.", "Error", "Error");
+                    }
+
                 } catch (Exception e) {
                     mostrarMensaje("Ocurrió un error al eliminar el servicio: " + e.getMessage(), "Error", "Error");
+                    e.printStackTrace();
                 }
             } else {
                 mostrarMensaje("Eliminación cancelada.", "Info", "Cancelación");
@@ -590,7 +570,7 @@ public class MenuServicios extends javax.swing.JFrame {
 
             // Verificar si los campos obligatorios están vacíos
             if (servicio.isEmpty() || responsable.isEmpty()|| detalles_servicio.isEmpty()) {
-                mostrarMensaje("All fields must be filled out.", "Error", "Input Error");
+                mostrarMensaje("Todos los campos deben ser completos.", "Error", "Error de Entrada");
                 txtServicio.requestFocusInWindow();
                 return;
             }
@@ -613,14 +593,9 @@ public class MenuServicios extends javax.swing.JFrame {
             cargarRelacionesEnTabla();
 
         } catch (Exception e) {
-            mostrarMensaje("An unexpected error occurred: " + e.getMessage(), "Error", "Error");
-            System.out.println("An error occurred: " + e.getMessage());
+            mostrarMensaje("Ocurrió un error inesperado: " + e.getMessage(), "Error", "Error");
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
-
-    private void themeSerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_themeSerActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_themeSerActionPerformed
 
     private void txtDetallesServicioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDetallesServicioKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_TAB) {
@@ -629,11 +604,7 @@ public class MenuServicios extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtDetallesServicioKeyPressed
 
-    private void txtResponsableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtResponsableActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtResponsableActionPerformed
-
-    private void themeSerMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_themeSerMousePressed
+    private void btnThemeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnThemeMousePressed
         try {
         // Verificar el Look and Feel actual y cambiar de tema
         if (UIManager.getLookAndFeel().getClass().getName().equals("com.formdev.flatlaf.FlatLightLaf")) {
@@ -663,11 +634,7 @@ public class MenuServicios extends javax.swing.JFrame {
         e.printStackTrace();
         // Aquí podrías mostrar un mensaje al usuario si ocurre un error
     }
-    }//GEN-LAST:event_themeSerMousePressed
-
-    private void btnAgregarAsigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarAsigActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAgregarAsigActionPerformed
+    }//GEN-LAST:event_btnThemeMousePressed
 
     private int filaSeleccionadaBen = -1;
     private int filaSeleccionadaSer = -1;
@@ -717,9 +684,9 @@ public class MenuServicios extends javax.swing.JFrame {
                 try {
                     control.agregarAsignacion(nuevaAsignacion); // Crear la asignación en la base de datos
                     cargarRelacionesEnTabla();
-                    System.out.println("Asignación guardada exitosamente en la base de datos.");
                 } catch (Exception e) {
-                    System.out.println("Error al asignar el beneficiario: " + e.getMessage());
+                    mostrarMensaje("Ocurrió un error al asignar el beneficiario: " + e.getMessage(), "Error", "Error");
+
                 }
                
                 mostrarMensaje("Beneficiario " + asigBen + " asignado al servicio " + asigSer, "Info", "Asignación Exitosa");
@@ -727,13 +694,9 @@ public class MenuServicios extends javax.swing.JFrame {
         }
     } else {
         // Mostrar un mensaje si no se seleccionó ninguna fila
-        JOptionPane.showMessageDialog(this, "Seleccione un beneficiario y un servicio.", "Error", JOptionPane.ERROR_MESSAGE);
-    }
+        mostrarMensaje("Seleccione un beneficiario y un servicio.", "Error", "Error");
+        }
     }//GEN-LAST:event_btnAgregarAsigMouseClicked
-
-    private void txtServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtServicioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtServicioActionPerformed
 
     private void btnLimpiarAsigMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLimpiarAsigMousePressed
         // TODO add your handling code here:
@@ -743,11 +706,7 @@ public class MenuServicios extends javax.swing.JFrame {
         buscarSer.setText("");      
     }//GEN-LAST:event_btnLimpiarAsigMousePressed
 
-    private void btnLimpiarAsigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarAsigActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnLimpiarAsigActionPerformed
 
-    private int filaSeleccionadaAsig = -1;
     private void btnBorrarAsigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarAsigActionPerformed
         int filaSeleccionadaAsig = tablaAsig.getSelectedRow();
 
@@ -755,22 +714,22 @@ public class MenuServicios extends javax.swing.JFrame {
             // Convertir el índice de la vista al índice del modelo
             int filaSeleccionadaModelo = tablaAsig.convertRowIndexToModel(filaSeleccionadaAsig);
 
-            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar este beneficiario?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar esta asignación?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
             if (confirmacion == JOptionPane.YES_OPTION) {
                 try {
-                    // Obtener el ID del beneficiario desde el modelo de la tabla
+                    // Obtener el ID del asignacion desde el modelo de la tabla
                     long num_Assig = Long.parseLong(String.valueOf(tablaAsig.getModel().getValueAt(filaSeleccionadaModelo, 0)));
 
-                    // Llamar al método para eliminar el beneficiario
+                    // Llamar al método para eliminar la asignacion
                     control.borrarAsig(num_Assig); 
 
                     // Recargar la tabla después de la eliminación
                     cargarRelacionesEnTabla();
 
-                    mostrarMensaje("Beneficiario eliminado exitosamente.", "Info", "Éxito");
+                    mostrarMensaje("Asignación eliminada exitosamente.", "Info", "Éxito");
                 } catch (Exception e) {
-                    mostrarMensaje("Ocurrió un error al eliminar el beneficiario: " + e.getMessage(), "Error", "Error");
+                    mostrarMensaje("Ocurrió un error al eliminar la asignación: " + e.getMessage(), "Error", "Error");
                     e.printStackTrace();
                 }
             } else {
@@ -784,9 +743,27 @@ public class MenuServicios extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnBorrarAsigActionPerformed
 
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEditarActionPerformed
+    private void reporteExelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reporteExelActionPerformed
+        ExportarExcel obj;
+
+        try {
+            obj = new ExportarExcel();
+            obj.exportarExcel(tablaAsig);
+        } catch (IOException ex) {
+            System.out.println("Error: " + ex);
+        }
+    }//GEN-LAST:event_reporteExelActionPerformed
+
+    private void reporteExel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reporteExel1ActionPerformed
+        ExportarExcel obj;
+
+        try {
+            obj = new ExportarExcel();
+            obj.exportarExcel(tablaServicios);
+        } catch (IOException ex) {
+            System.out.println("Error: " + ex);
+        }
+    }//GEN-LAST:event_reporteExel1ActionPerformed
 
     
     /**
@@ -794,6 +771,7 @@ public class MenuServicios extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField BuscarAsig;
     private javax.swing.JButton btnAgregarAsig;
     private javax.swing.JButton btnBorrarAsig;
     private javax.swing.JButton btnEditar;
@@ -801,6 +779,7 @@ public class MenuServicios extends javax.swing.JFrame {
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnLimpiarAsig;
+    private javax.swing.JButton btnTheme;
     private javax.swing.JTextField buscarBen;
     private javax.swing.JTextField buscarSer;
     private javax.swing.JTextField buscarTxt;
@@ -808,8 +787,6 @@ public class MenuServicios extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -830,16 +807,14 @@ public class MenuServicios extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton reporteExel;
+    private javax.swing.JButton reporteExel1;
     private javax.swing.JTable tablaAsig;
     private javax.swing.JTable tablaBenAsig;
     private javax.swing.JTable tablaServicios;
     private javax.swing.JTable tablaServiciosAsig;
-    private javax.swing.JButton themeSer;
     private javax.swing.JTextField txtAsigBen;
-    private javax.swing.JTextField txtAsigBenBorrar;
     private javax.swing.JTextField txtAsigSer;
-    private javax.swing.JTextField txtAsigSerBorrar;
     private javax.swing.JTextArea txtDetallesServicio;
     private javax.swing.JTextField txtResponsable;
     private javax.swing.JTextField txtServicio;
@@ -910,6 +885,8 @@ public class MenuServicios extends javax.swing.JFrame {
                 btnEliminar.setEnabled(true);
             }
         });
+        
+        
     }
     
     public void mostrarMensaje(String mensaje, String tipo, String titulo){
@@ -937,7 +914,8 @@ public class MenuServicios extends javax.swing.JFrame {
             }
         }
         // Ajustar el ancho de la columna
-        tabla.getColumnModel().getColumn(i).setPreferredWidth(width * 10); // Ajustar el multiplicador según sea necesario
+            tabla.getColumnModel().getColumn(i).setPreferredWidth(width * 10); // Ajustar el multiplicador según sea necesario
+            tabla.getColumnModel().getColumn(0).setPreferredWidth(50);
         }
     }   
     
@@ -955,7 +933,7 @@ public class MenuServicios extends javax.swing.JFrame {
         DefaultTableModel modeloTabla = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Todas las celdas no editables
+                return false; 
             }
         };
 
@@ -1004,7 +982,7 @@ public class MenuServicios extends javax.swing.JFrame {
                 } else {
                     // Aplicar el filtro (insensible a mayúsculas/minúsculas)
                     sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
-                    btnEliminar.setEnabled(false); // Deshabilitar el botón eliminar mientras se filtra
+                    btnEliminar.setEnabled(false); 
                 }
             }
         });
@@ -1015,7 +993,7 @@ public class MenuServicios extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 tablaBenAsig.getSelectionModel().clearSelection();  // Quitar la selección de la tabla
                 if (sorter != null) {
-                sorter.setRowFilter(null); // Quitar todos los filtros
+                sorter.setRowFilter(null); 
                 }
             }
         });
@@ -1073,7 +1051,7 @@ public class MenuServicios extends javax.swing.JFrame {
                 } else {
                     // Aplicar el filtro (insensible a mayúsculas/minúsculas)
                     sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
-                    btnEliminar.setEnabled(false); // Deshabilitar el botón eliminar mientras se filtra
+                    btnEliminar.setEnabled(false); 
                 }
             }
         });
@@ -1083,7 +1061,7 @@ public class MenuServicios extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 tablaServiciosAsig.getSelectionModel().clearSelection();  // Quitar la selección de la tabla
                 if (sorter != null) {
-                sorter.setRowFilter(null); // Quitar todos los filtros
+                sorter.setRowFilter(null); 
                 }
             }
         });
@@ -1099,7 +1077,7 @@ public class MenuServicios extends javax.swing.JFrame {
         };
 
         // Establecemos los nombres de las columnas
-        String[] titulos = {"Id-Asig", "Beneficiario","Discapacidades", "Edad", "Servicio", "Responsable"};
+        String[] titulos = {"Id", "Beneficiario","Discapacidades", "Edad", "Servicio", "Responsable"};
         modeloTabla.setColumnIdentifiers(titulos);
 
         List<Asignacion> listarAsignaciones = control.traerAsignaciones();
@@ -1133,17 +1111,46 @@ public class MenuServicios extends javax.swing.JFrame {
                 modeloTabla.addRow(objeto);
             }
         }
+        
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modeloTabla);
+        tablaAsig.setRowSorter(sorter);
 
         tablaAsig.setModel(modeloTabla);
-
-        // Evitar que las columnas se reordenen
         tablaAsig.getTableHeader().setReorderingAllowed(false);
-        // Evitar que las columnas se redimensionen
         tablaAsig.getTableHeader().setResizingAllowed(false);
 
         ajustarAnchoColumnas(tablaAsig);
-        centrarColumnas(tablaAsig, new int[]{0}); // Puedes ajustar esto según sea necesario
-        centrarColumnas(tablaAsig, new int[]{3});
+        centrarColumnas(tablaAsig, new int[]{0, 3, 5});
+
+        // Filtrado de texto
+        BuscarAsig.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String text = BuscarAsig.getText();
+                if (text.trim().length() == 0) {
+                    sorter.setRowFilter(null);
+                    btnBorrarAsig.setEnabled(true);
+                    reporteExel.setEnabled(true);
+                } else {
+                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                    btnBorrarAsig.setEnabled(false);
+                    reporteExel.setEnabled(false);
+                }
+            }
+        });
+
+        // Opción de limpiar el campo manualmente
+        BuscarAsig.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (!BuscarAsig.getText().isEmpty()) {
+                    BuscarAsig.setText(""); // Limpiar el campo de texto
+                    sorter.setRowFilter(null);
+                    btnBorrarAsig.setEnabled(true);
+                    reporteExel.setEnabled(true);
+                }
+            }
+        });
     
     }
 }

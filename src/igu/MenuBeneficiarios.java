@@ -6,6 +6,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,6 +22,8 @@ import logica.Beneficiario;
 import logica.Controladora; 
 import javax.swing.UIManager;
 import javax.swing.table.TableRowSorter;
+import jtable_a_excel.ExportarExcel;
+import logica.Asignacion;
 
 
 
@@ -68,9 +71,10 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
         irAtrasBen = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnTheme = new javax.swing.JButton();
         buscarTxt = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        reporteExel1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menú Beneficiarios");
@@ -95,7 +99,7 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
         detallesText.setFocusable(false);
         jPanel1.add(detallesText, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, 340, -1));
 
-        disText.setText("Ingrese el tipo de discapacidad:");
+        disText.setText("Ingrese discapacidades (separadas en comas):");
         disText.setFocusable(false);
         jPanel1.add(disText, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 80, -1, -1));
 
@@ -106,11 +110,6 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
         btnEditar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnEditarMouseClicked(evt);
-            }
-        });
-        btnEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarActionPerformed(evt);
             }
         });
         jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 210, 150, 40));
@@ -240,30 +239,27 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
         jLabel2.setOpaque(true);
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 30, 90, 20));
 
-        jButton1.setText("Theme");
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnTheme.setText("Theme");
+        btnTheme.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnTheme.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                jButton1MousePressed(evt);
+                btnThemeMousePressed(evt);
             }
         });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 70, -1, -1));
-
-        buscarTxt.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                buscarTxtKeyReleased(evt);
-            }
-        });
+        jPanel1.add(btnTheme, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 70, -1, -1));
         jPanel1.add(buscarTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 320, 300, 25));
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel3.setText("Buscar:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 320, 60, 25));
+
+        reporteExel1.setText("Descargar");
+        reporteExel1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reporteExel1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(reporteExel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 130, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -280,10 +276,6 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        
-    }//GEN-LAST:event_btnEditarActionPerformed
-
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         try {
             // Obtener los valores de los campos de texto
@@ -294,7 +286,7 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
 
             // Verificar si los campos obligatorios están vacíos
             if (nombre.isEmpty() || discapacidadesTexto.isEmpty()) {
-                mostrarMensaje("All fields must be filled out.", "Error", "Input Error");
+                 mostrarMensaje("Todos los campos deben ser completos.", "Error", "Error de Entrada");
                 txtNombre.requestFocusInWindow();
                 return;
             }
@@ -304,14 +296,14 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
             try {
                 edad = Integer.valueOf(this.txtEdad.getText().trim());
             } catch (NumberFormatException e) {
-                mostrarMensaje("Invalid age. Please enter a valid number.", "Error", "Input Error");
+                mostrarMensaje("Edad inválida. Por favor ingrese un número válido.", "Error", "Error de Entrada");
                 txtEdad.requestFocusInWindow();
                 return;
             }
 
             // Validar que la edad sea mayor que 0
             if (edad <= 0) {
-                mostrarMensaje("Age must be greater than 0.", "Error", "Input Error");
+                mostrarMensaje("La edad debe ser mayor que 0.", "Error", "Error de Entrada");
                 txtEdad.requestFocusInWindow();
                 return;
             }
@@ -321,7 +313,7 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
 
             // Verificar que la lista de discapacidades no esté vacía
             if (discapacidades.isEmpty()) {
-                mostrarMensaje("At least one disability must be provided.", "Error", "Input Error");
+                mostrarMensaje("Debe proporcionar al menos una discapacidad.", "Error", "Error de Entrada");
                 txtDiscapacidad.requestFocusInWindow();
                 return;
             }
@@ -342,8 +334,8 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
             cargarTabla();
 
         } catch (Exception e) {
-            mostrarMensaje("An unexpected error occurred: " + e.getMessage(), "Error", "Error");
-            System.out.println("An error occurred: " + e.getMessage());
+            mostrarMensaje("Ocurrió un error inesperado: " + e.getMessage(), "Error", "Error");
+            
         }    
     }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -385,7 +377,8 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
                 enModoEdicion = true;
             } else {
                 // Mostrar un mensaje si no hay ninguna fila seleccionada
-                JOptionPane.showMessageDialog(this, "No row selected. Please select a row to edit.", "Error", JOptionPane.ERROR_MESSAGE);
+                mostrarMensaje("No se ha seleccionado ninguna fila. Por favor, seleccione una fila para editar.", "Error", "Error");
+
             }
         } else {
             // Si estamos en modo edición, validar y guardar los cambios
@@ -401,19 +394,19 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
                     edad = Integer.valueOf(txtEdad.getText().trim());
                 } catch (NumberFormatException e) {
                     // Mostrar un mensaje de error si la conversión falla
-                    JOptionPane.showMessageDialog(this, "Invalid age. Please enter a valid number.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                    mostrarMensaje("Edad inválida. Por favor, ingrese un número válido.", "Error de Entrada", "Error");
                     return; // Salir del método para evitar acciones posteriores
                 }
 
                 // Validar que la edad sea mayor que 0
                 if (edad <= 0) {
-                    JOptionPane.showMessageDialog(this, "Age must be greater than 0.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                    mostrarMensaje("La edad debe ser mayor que 0.", "Error de Entrada", "Error");
                     return; // Salir del método para evitar acciones posteriores
                 }
 
                 // Verificar si los campos obligatorios están vacíos
                 if (nombre.isEmpty() || discapacidadTexto.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "All fields must be filled out.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                    mostrarMensaje("Todos los campos deben ser llenados.", "Error de Entrada", "Error");
                     return; // Salir del método para evitar acciones posteriores
                 }
                 
@@ -431,7 +424,7 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
                 cargarTabla();
                 
                 // Mostrar un mensaje de éxito
-                JOptionPane.showMessageDialog(this, "Record updated successfully.");
+                mostrarMensaje("Registro actualizado con éxito.", "Éxito", "Información");
 
                 // Limpiar los campos de texto después de guardar los cambios
                 txtNombre.setText("");
@@ -472,6 +465,14 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
             try {
                 // Obtener el ID del beneficiario desde el modelo de la tabla
                 long num_Beneficiario = Long.parseLong(String.valueOf(tablaBen.getModel().getValueAt(filaSeleccionadaModelo, 0)));
+                
+                
+                // Verificar si existen asignaciones antes de eliminar
+                List<Asignacion> asignaciones = control.findAsignacionesPorBeneficiario(num_Beneficiario);
+                if (!asignaciones.isEmpty()) {
+                    mostrarMensaje("No se puede eliminar este beneficiario porque tiene asignaciones activas.", "Error", "Error");
+                    return;
+                }
                 
                 // Llamar al método para eliminar el beneficiario
                 control.borrarBeneficiario(num_Beneficiario); 
@@ -518,15 +519,7 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtDetallesKeyPressed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void buscarTxtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_buscarTxtKeyReleased
-        
-    }//GEN-LAST:event_buscarTxtKeyReleased
-
-    private void jButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MousePressed
+    private void btnThemeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnThemeMousePressed
         try {
         // Verificar el Look and Feel actual y cambiar de tema
         if (UIManager.getLookAndFeel().getClass().getName().equals("com.formdev.flatlaf.FlatLightLaf")) {
@@ -556,7 +549,18 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
         e.printStackTrace();
         // Aquí podrías mostrar un mensaje al usuario si ocurre un error
     }
-    }//GEN-LAST:event_jButton1MousePressed
+    }//GEN-LAST:event_btnThemeMousePressed
+
+    private void reporteExel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reporteExel1ActionPerformed
+        ExportarExcel obj;
+
+        try {
+            obj = new ExportarExcel();
+            obj.exportarExcel(tablaBen);
+        } catch (IOException ex) {
+            System.out.println("Error: " + ex);
+        }
+    }//GEN-LAST:event_reporteExel1ActionPerformed
 
 
 
@@ -571,12 +575,12 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnElimianr;
     private javax.swing.JButton btnLimpiar;
+    private javax.swing.JButton btnTheme;
     private javax.swing.JTextField buscarTxt;
     private javax.swing.JLabel detallesText;
     private javax.swing.JLabel disText;
     private javax.swing.JLabel edadText;
     private javax.swing.JLabel irAtrasBen;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -585,6 +589,7 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel nombreText;
+    private javax.swing.JButton reporteExel1;
     private javax.swing.JTable tablaBen;
     private javax.swing.JTextArea txtDetalles;
     private javax.swing.JTextField txtDiscapacidad;
@@ -691,7 +696,9 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
             }
         }
         // Ajustar el ancho de la columna
-        tabla.getColumnModel().getColumn(i).setPreferredWidth(width * 10); // Ajustar el multiplicador según sea necesario
+            tabla.getColumnModel().getColumn(i).setPreferredWidth(width * 10); // Ajustar el multiplicador según sea necesario
+            tabla.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tabla.getColumnModel().getColumn(2).setPreferredWidth(50);
         }
     }   
     

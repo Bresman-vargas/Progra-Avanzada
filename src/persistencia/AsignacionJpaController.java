@@ -87,4 +87,25 @@ public class AsignacionJpaController {
         }
     }
     
+    public List<Asignacion> findAsignacionesPorBeneficiario(Long beneficiarioId) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.createQuery("SELECT a FROM Asignacion a WHERE a.beneficiario.id = :beneficiarioId", Asignacion.class)
+                     .setParameter("beneficiarioId", beneficiarioId)
+                     .getResultList();
+        } finally {
+            em.close(); // Cerrar el EntityManager
+        }
+    }
+    
+    public List<Asignacion> obtenerAsignacionesPorServicio(long servicioId) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.createQuery("SELECT a FROM Asignacion a JOIN a.servicios s WHERE s.id = :servicioId", Asignacion.class)
+                     .setParameter("servicioId", servicioId)
+                     .getResultList();
+        } finally {
+            em.close();
+        }
+    }
 }

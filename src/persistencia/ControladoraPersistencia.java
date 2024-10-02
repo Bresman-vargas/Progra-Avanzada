@@ -80,7 +80,14 @@ public class ControladoraPersistencia {
     public void modificarAsig(Asignacion Asig) throws Exception {
         AsignacionJpa.edit(Asig);
     }
- 
+
+
+    public List<Asignacion> findAsignacionesPorBeneficiario(long num_Beneficiario) {
+        return AsignacionJpa.findAsignacionesPorBeneficiario(num_Beneficiario);
+    }
+
+
+    public List<Asignacion> obtenerAsignacionesPorServicio(long num_Servicio) {
+        return AsignacionJpa.obtenerAsignacionesPorServicio(num_Servicio);
+    }
 }
-
-

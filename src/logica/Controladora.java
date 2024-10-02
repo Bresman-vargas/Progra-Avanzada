@@ -101,4 +101,15 @@ public class Controladora {
         asignacion.setProgreso(NumeroProgreso);
         controlPersis.modificarAsig(asignacion);
     }
+
+    
+
+    public List<Asignacion> findAsignacionesPorBeneficiario(long num_Beneficiario) {
+        return controlPersis.findAsignacionesPorBeneficiario(num_Beneficiario);
+    }
+
+
+    public List<Asignacion> obtenerAsignacionesPorServicio(long num_Servicio) {
+        return controlPersis.obtenerAsignacionesPorServicio(num_Servicio);
+    }
 }
