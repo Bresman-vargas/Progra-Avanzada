@@ -72,6 +72,14 @@ public class ControladoraPersistencia {
     public void borrarAsig(long num_Assig) throws Exception {
         AsignacionJpa.destroy(num_Assig);
     }
+
+    public Asignacion traerAsing(long num_Asig) {
+        return AsignacionJpa.find(num_Asig);
+    }
+
+    public void modificarAsig(Asignacion Asig) throws Exception {
+        AsignacionJpa.edit(Asig);
+    }
  
 }
 

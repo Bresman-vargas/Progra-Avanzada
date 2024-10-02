@@ -11,6 +11,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
 @Entity
 @Table(name = "asignaciones") // Nombre de la tabla en la base de datos
 public class Asignacion implements Serializable {
@@ -32,15 +33,18 @@ public class Asignacion implements Serializable {
     private List<Servicio> servicios; // Lista de Servicios
     
     // progreso
-
+    private int Progreso;
+    
     // Constructor por defecto
-    public Asignacion() {}
+    public Asignacion() {
+        this.Progreso = 0;
+    }
 
     // Constructor
     public Asignacion(Beneficiario beneficiario, List<Servicio> servicios) {
         this.beneficiario = beneficiario;
         this.servicios = servicios;
-        //this.progreso = 0;
+        this.Progreso = 0;
     }
 
     // Getters y Setters
@@ -50,7 +54,11 @@ public class Asignacion implements Serializable {
     public void setBeneficiario(Beneficiario beneficiario) { this.beneficiario = beneficiario; }
     public List<Servicio> getServicios() { return servicios; }
     public void setServicios(List<Servicio> servicios) { this.servicios = servicios; }
-    
-    // setter getter progreso
+    public int getProgreso() {
+        return Progreso;
+    }
+    public void setProgreso(int Progreso) {
+        this.Progreso = Progreso;
+    }
 }
 

@@ -356,7 +356,6 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
     
     private boolean enModoEdicion = false;
     
-    
     private void btnEditarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarMouseClicked
             if (!enModoEdicion) {
             // Obtener el índice de la fila seleccionada
@@ -456,6 +455,7 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEditarMouseClicked
 
+    
     private int filaSeleccionada = -1;
     
     private void btnElimianrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElimianrActionPerformed

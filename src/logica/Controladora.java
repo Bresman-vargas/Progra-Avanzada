@@ -91,4 +91,14 @@ public class Controladora {
     public void borrarAsig(long num_Assig) throws Exception {
         controlPersis.borrarAsig(num_Assig);
     }
+
+    
+    public Asignacion traerAsing(long num_Asig) {
+        return controlPersis.traerAsing(num_Asig);
+    }
+
+    public void modificarAsig(Asignacion asignacion, Integer NumeroProgreso) throws Exception {
+        asignacion.setProgreso(NumeroProgreso);
+        controlPersis.modificarAsig(asignacion);
+    }
 }

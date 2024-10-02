@@ -249,6 +249,11 @@ public class MenuServicios extends javax.swing.JFrame {
                 btnEditarMouseClicked(evt);
             }
         });
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
         jPanel3.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 120, 140, 40));
         jPanel3.add(buscarTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 180, 300, -1));
 
@@ -439,6 +444,7 @@ public class MenuServicios extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
     
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         txtServicio.requestFocusInWindow();
@@ -777,6 +783,10 @@ public class MenuServicios extends javax.swing.JFrame {
             mostrarMensaje("No se ha seleccionado ninguna fila.", "Error", "Error");
         }
     }//GEN-LAST:event_btnBorrarAsigActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     
     /**
