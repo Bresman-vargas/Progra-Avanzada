@@ -1,5 +1,6 @@
 package igu;
 
+import ExportarTxt.ExportarTxt;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.IntelliJTheme;
 import java.awt.Color;
@@ -27,7 +28,6 @@ import logica.Controladora;
 import logica.Servicio;
 import javax.swing.UIManager;
 import javax.swing.table.TableRowSorter;
-import jtable_a_excel.ExportarExcel;
 import logica.Beneficiario;
 import logica.Asignacion;
 
@@ -744,24 +744,24 @@ public class MenuServicios extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBorrarAsigActionPerformed
 
     private void reporteExelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reporteExelActionPerformed
-        ExportarExcel obj;
+        ExportarTxt obj;
 
         try {
-            obj = new ExportarExcel();
-            obj.exportarExcel(tablaAsig);
+            obj = new ExportarTxt();
+            obj.exportarTxt(tablaAsig);  
         } catch (IOException ex) {
-            System.out.println("Error: " + ex);
+            System.out.println("Error: " + ex);  
         }
     }//GEN-LAST:event_reporteExelActionPerformed
 
     private void reporteExel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reporteExel1ActionPerformed
-        ExportarExcel obj;
+        ExportarTxt obj;
 
         try {
-            obj = new ExportarExcel();
-            obj.exportarExcel(tablaServicios);
+            obj = new ExportarTxt();
+            obj.exportarTxt(tablaServicios);  
         } catch (IOException ex) {
-            System.out.println("Error: " + ex);
+            System.out.println("Error: " + ex);  
         }
     }//GEN-LAST:event_reporteExel1ActionPerformed
 

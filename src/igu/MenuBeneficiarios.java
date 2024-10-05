@@ -1,4 +1,5 @@
 package igu;
+import ExportarTxt.ExportarTxt;
 import com.formdev.flatlaf.FlatLightLaf; 
 import com.formdev.flatlaf.IntelliJTheme;
 import java.awt.Color;
@@ -22,7 +23,6 @@ import logica.Beneficiario;
 import logica.Controladora; 
 import javax.swing.UIManager;
 import javax.swing.table.TableRowSorter;
-import jtable_a_excel.ExportarExcel;
 import logica.Asignacion;
 
 
@@ -552,13 +552,13 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
     }//GEN-LAST:event_btnThemeMousePressed
 
     private void reporteExel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reporteExel1ActionPerformed
-        ExportarExcel obj;
+        ExportarTxt obj;
 
         try {
-            obj = new ExportarExcel();
-            obj.exportarExcel(tablaBen);
+            obj = new ExportarTxt();
+            obj.exportarTxt(tablaBen);  
         } catch (IOException ex) {
-            System.out.println("Error: " + ex);
+            System.out.println("Error: " + ex);  
         }
     }//GEN-LAST:event_reporteExel1ActionPerformed
 

@@ -25,6 +25,8 @@ public class Beneficiario implements Serializable {
     private List<String> discapacidades = new ArrayList<>();
     
     private String detallesAdicionales;
+    
+    private boolean inicializado; // Nuevo campo
 
     // Relación uno a muchos con Servicio
     @OneToMany(mappedBy = "beneficiario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
@@ -39,6 +41,7 @@ public class Beneficiario implements Serializable {
         this.edad = edad;
         this.discapacidades = discapacidades;
         this.detallesAdicionales = detallesAdicionales;
+        this.inicializado = false; // Inicialmente no está inicializado
     }
 
     // Getters y Setters

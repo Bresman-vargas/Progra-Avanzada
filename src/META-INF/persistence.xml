@@ -16,11 +16,6 @@
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
       <property name="javax.persistence.jdbc.password" value=""/>
 
-      <!-- Acción para crear tablas -->
-      <property name="javax.persistence.schema-generation.database.action" value="create"/>
-
-      <!-- Para mostrar las sentencias SQL en la consola -->
-      <property name="eclipselink.logging.level" value="FINE"/>
     </properties>
   </persistence-unit>
 </persistence>

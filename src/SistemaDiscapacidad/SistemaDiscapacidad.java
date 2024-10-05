@@ -18,6 +18,7 @@ public class SistemaDiscapacidad {
             System.err.println("Failed to initialize LaF");
         }
         
+        
         java.awt.EventQueue.invokeLater(() -> {
             Principal principal = new Principal();
             principal.setLocationRelativeTo(null); // Centrar la ventana

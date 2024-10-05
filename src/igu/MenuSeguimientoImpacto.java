@@ -1,5 +1,6 @@
 package igu;
 
+import ExportarTxt.ExportarTxt;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.IntelliJTheme;
 import java.awt.Color;
@@ -27,7 +28,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
-import jtable_a_excel.ExportarExcel;
 import logica.Asignacion;
 import logica.Controladora;
 
@@ -404,13 +404,13 @@ public class MenuSeguimientoImpacto extends javax.swing.JFrame {
     }//GEN-LAST:event_SliderProgKeyPressed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        ExportarExcel obj;
+        ExportarTxt obj;
 
         try {
-            obj = new ExportarExcel();
-            obj.exportarExcel(tablaImpacto);
+            obj = new ExportarTxt();
+            obj.exportarTxt(tablaImpacto);  
         } catch (IOException ex) {
-            System.out.println("Error: " + ex);
+            System.out.println("Error: " + ex);  
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
