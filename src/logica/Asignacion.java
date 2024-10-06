@@ -1,6 +1,7 @@
 package logica;
+
 import java.io.Serializable;
-import java.util.List;
+import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,8 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKey;
 import javax.persistence.Table;
-
 
 @Entity
 @Table(name = "asignaciones") // Nombre de la tabla en la base de datos
@@ -30,18 +31,19 @@ public class Asignacion implements Serializable {
         joinColumns = @JoinColumn(name = "asignacion_id"), // Columna de la tabla asignaciones
         inverseJoinColumns = @JoinColumn(name = "servicio_id") // Columna de la tabla servicios
     )
-    private List<Servicio> servicios; // Lista de Servicios
+    @MapKey(name = "id") // El ID del servicio será la clave en el mapa
+    private Map<Long, Servicio> servicios; // Mapa de Servicios donde la clave es el ID
     
-    // progreso
+    // Progreso
     private int Progreso;
-    
+
     // Constructor por defecto
     public Asignacion() {
         this.Progreso = 0;
     }
 
     // Constructor
-    public Asignacion(Beneficiario beneficiario, List<Servicio> servicios) {
+    public Asignacion(Beneficiario beneficiario, Map<Long, Servicio> servicios) {
         this.beneficiario = beneficiario;
         this.servicios = servicios;
         this.Progreso = 0;
@@ -50,15 +52,13 @@ public class Asignacion implements Serializable {
     // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
     public Beneficiario getBeneficiario() { return beneficiario; }
     public void setBeneficiario(Beneficiario beneficiario) { this.beneficiario = beneficiario; }
-    public List<Servicio> getServicios() { return servicios; }
-    public void setServicios(List<Servicio> servicios) { this.servicios = servicios; }
-    public int getProgreso() {
-        return Progreso;
-    }
-    public void setProgreso(int Progreso) {
-        this.Progreso = Progreso;
-    }
-}
 
+    public Map<Long, Servicio> getServicios() { return servicios; }
+    public void setServicios(Map<Long, Servicio> servicios) { this.servicios = servicios; }
+
+    public int getProgreso() { return Progreso; }
+    public void setProgreso(int Progreso) { this.Progreso = Progreso; }
+}

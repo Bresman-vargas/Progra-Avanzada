@@ -13,7 +13,9 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDialog;
@@ -676,20 +678,27 @@ public class MenuServicios extends javax.swing.JFrame {
             // Si el usuario confirma (presiona Sí), realizar la asignación
             if (respuesta == JOptionPane.YES_OPTION) {
                 // Crear una nueva instancia de Asignacion
-                
                 Asignacion nuevaAsignacion = new Asignacion();
                 nuevaAsignacion.setBeneficiario(beneficiario); // Establecer el beneficiario
-                nuevaAsignacion.setServicios(Collections.singletonList(servicio)); // Establecer el servicio
-                
-                try {
-                    control.agregarAsignacion(nuevaAsignacion); // Crear la asignación en la base de datos
-                    cargarRelacionesEnTabla();
-                } catch (Exception e) {
-                    mostrarMensaje("Ocurrió un error al asignar el beneficiario: " + e.getMessage(), "Error", "Error");
 
+                if (servicio != null) {
+                    // Crear un nuevo mapa para los servicios
+                    Map<Long, Servicio> serviciosMap = new HashMap<>();
+                    serviciosMap.put(servicio.getId(), servicio); // Agregar el servicio al mapa con su ID como clave
+
+                    nuevaAsignacion.setServicios(serviciosMap); // Establecer el mapa de servicios
+
+                    try {
+                        control.agregarAsignacion(nuevaAsignacion); // Crear la asignación en la base de datos
+                        cargarRelacionesEnTabla();
+                    } catch (Exception e) {
+                        mostrarMensaje("Ocurrió un error al asignar el beneficiario: " + e.getMessage(), "Error", "Error");
+                    }
+
+                    mostrarMensaje("Beneficiario " + asigBen + " asignado al servicio " + asigSer, "Info", "Asignación Exitosa");
+                } else {
+                    mostrarMensaje("El servicio seleccionado es nulo, por favor verifique.", "Error", "Error");
                 }
-               
-                mostrarMensaje("Beneficiario " + asigBen + " asignado al servicio " + asigSer, "Info", "Asignación Exitosa");
             }
         }
     } else {
@@ -1084,32 +1093,35 @@ public class MenuServicios extends javax.swing.JFrame {
 
         if (listarAsignaciones != null) {
             for (Asignacion asig : listarAsignaciones) {
-                // Obtener el nombre del beneficiario
-                String beneficiarioNombre = asig.getBeneficiario() != null ? asig.getBeneficiario().getNombre() : "N/A";
+            // Obtener el nombre del beneficiario
+            String beneficiarioNombre = asig.getBeneficiario() != null ? asig.getBeneficiario().getNombre() : "N/A";
 
-                // Obtener la edad del beneficiario
-                String edadBeneficiario = asig.getBeneficiario() != null ? String.valueOf(asig.getBeneficiario().getEdad()) : "N/A";
+            // Obtener la edad del beneficiario
+            String edadBeneficiario = asig.getBeneficiario() != null ? String.valueOf(asig.getBeneficiario().getEdad()) : "N/A";
 
-                // Obtener las discapacidades del beneficiario como lista
-                List<String> discapacidades = asig.getBeneficiario() != null ? asig.getBeneficiario().getDiscapacidades() : new ArrayList<>();
-                String beneficiarioDiscapacidades = "N/A";
-                if (!discapacidades.isEmpty()) {
-                    beneficiarioDiscapacidades = String.join(", ", discapacidades);
-                }
-
-                // Obtener el nombre del servicio y el responsable (solo el primero)
-                String servicioNombre = "N/A";
-                String responsable = "N/A";
-                if (asig.getServicios() != null && !asig.getServicios().isEmpty()) {
-                    Servicio primerServicio = asig.getServicios().get(0);
-                    servicioNombre = primerServicio.getNombre(); // Mostrar solo el primer servicio
-                    responsable = primerServicio.getResponsable(); // Obtener el responsable del servicio
-                }
-
-                // Crear un objeto con los datos para la tabla
-                Object[] objeto = {asig.getId(),  beneficiarioNombre, beneficiarioDiscapacidades, edadBeneficiario, servicioNombre, responsable};
-                modeloTabla.addRow(objeto);
+            // Obtener las discapacidades del beneficiario como lista
+            List<String> discapacidades = asig.getBeneficiario() != null ? asig.getBeneficiario().getDiscapacidades() : new ArrayList<>();
+            String beneficiarioDiscapacidades = "N/A";
+            if (!discapacidades.isEmpty()) {
+                beneficiarioDiscapacidades = String.join(", ", discapacidades);
             }
+
+            // Obtener el nombre del servicio y el responsable (solo el primero)
+            String servicioNombre = "N/A";
+            String responsable = "N/A";
+            if (asig.getServicios() != null && !asig.getServicios().isEmpty()) {
+                // Obtener la primera entrada del mapa de servicios
+                Map.Entry<Long, Servicio> primerServicioEntry = asig.getServicios().entrySet().iterator().next();
+                Servicio primerServicio = primerServicioEntry.getValue(); // Obtener el primer servicio del mapa
+
+                servicioNombre = primerServicio.getNombre(); // Mostrar solo el primer servicio
+                responsable = primerServicio.getResponsable(); // Obtener el responsable del servicio
+            }
+
+            // Crear un objeto con los datos para la tabla
+            Object[] objeto = {asig.getId(), beneficiarioNombre, beneficiarioDiscapacidades, edadBeneficiario, servicioNombre, responsable};
+            modeloTabla.addRow(objeto);
+        }
         }
         
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modeloTabla);

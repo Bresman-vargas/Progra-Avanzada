@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDialog;
@@ -30,6 +31,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 import logica.Asignacion;
 import logica.Controladora;
+import logica.Servicio;
 
 public class MenuSeguimientoImpacto extends javax.swing.JFrame {
 
@@ -258,23 +260,36 @@ public class MenuSeguimientoImpacto extends javax.swing.JFrame {
             if (filaSeleccionada != -1) {
                 long num_Asig = Long.parseLong(String.valueOf(tablaImpacto.getValueAt(filaSeleccionada, 0)));
 
+                // Traer la asignación usando el ID
                 this.asignacion = control.traerAsing(num_Asig);
 
+                // Establecer el nombre del beneficiario en el campo de texto
                 TxtBeneficiario.setText(asignacion.getBeneficiario().getNombre());
+
+                // Inicializar el nombre del servicio
                 String servicioNombre = "N/A";
+
+                // Verificar si el mapa de servicios no es nulo y no está vacío
                 if (asignacion.getServicios() != null && !asignacion.getServicios().isEmpty()) {
-                    servicioNombre = asignacion.getServicios().get(0).getNombre(); // Mostrar solo el primer servicio
+                    // Obtener el primer servicio del mapa
+                    Map.Entry<Long, Servicio> primerServicioEntry = asignacion.getServicios().entrySet().iterator().next();
+                    Servicio primerServicio = primerServicioEntry.getValue();
+                    servicioNombre = primerServicio.getNombre(); // Obtener el nombre del primer servicio
                 }
+
+                // Establecer el nombre del servicio en el campo de texto
                 TxtServicio.setText(servicioNombre);
+
+                // Establecer el progreso de la asignación
                 txtProgreso.setText(Long.toString(asignacion.getProgreso()));
-               
+
+                // Actualizar el valor del slider de progreso si no se está actualizando
                 if (!actualizandoSlider) {
                     SliderProg.setValue(asignacion.getProgreso());
                 }
 
                 // Cambiar el texto del botón a "Guardar Cambios"
                 btnEditar.setText("Editar Progreso");
-
 
                 // Deshabilitar los botones "Eliminar" y "Agregar"
                 btnBorrarAsig.setEnabled(false);
@@ -495,19 +510,29 @@ public class MenuSeguimientoImpacto extends javax.swing.JFrame {
 
     if (listarAsignaciones != null) {
         for (Asignacion asig : listarAsignaciones) {
+            // Obtener el nombre del beneficiario
             String beneficiarioNombre = asig.getBeneficiario() != null ? asig.getBeneficiario().getNombre() : "N/A";
+
+            // Obtener la edad del beneficiario
             String edadBeneficiario = asig.getBeneficiario() != null ? String.valueOf(asig.getBeneficiario().getEdad()) : "N/A";
+
+            // Obtener las discapacidades del beneficiario como lista
             List<String> discapacidades = asig.getBeneficiario() != null ? asig.getBeneficiario().getDiscapacidades() : new ArrayList<>();
             String beneficiarioDiscapacidades = discapacidades.isEmpty() ? "N/A" : String.join(", ", discapacidades);
 
+            // Obtener el nombre del servicio y el responsable (solo el primer servicio del mapa)
             String servicioNombre = "N/A";
             if (asig.getServicios() != null && !asig.getServicios().isEmpty()) {
-                servicioNombre = asig.getServicios().get(0).getNombre(); // Mostrar solo el primer servicio
+                // Obtener el primer servicio del mapa
+                Map.Entry<Long, Servicio> primerServicioEntry = asig.getServicios().entrySet().iterator().next();
+                Servicio primerServicio = primerServicioEntry.getValue();
+                servicioNombre = primerServicio.getNombre(); // Obtener el nombre del primer servicio
             }
 
             // En lugar de convertir el progreso a String, lo dejamos como Integer para usar la barra de progreso
             int progresoAsignacion = asig.getProgreso();
 
+            // Agregar los datos a la tabla
             Object[] objeto = {asig.getId(), beneficiarioNombre, beneficiarioDiscapacidades, edadBeneficiario, servicioNombre, progresoAsignacion};
             modeloTabla.addRow(objeto);
         }
