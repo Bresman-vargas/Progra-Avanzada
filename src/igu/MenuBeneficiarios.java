@@ -36,7 +36,7 @@ import logica.Asignacion;
 
 
 public class MenuBeneficiarios extends javax.swing.JFrame {
-    Controladora control = new Controladora();
+    Controladora control;
     Beneficiario beneficiario;
     
     private static final Color ACCENT_COLOR_LIGHT = new Color(50, 35, 62);
@@ -47,7 +47,15 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
     public MenuBeneficiarios() {
         initComponents();
         setResizable(false);
-        cargarTabla();
+        try {
+            control = new Controladora(); // Inicializar Controladora
+            cargarTabla(); // Cargar tabla solo si Controladora se inicializa correctamente
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                "Error al inicializar la controladora: " + e.getMessage(),
+                "Error de Inicialización",
+                JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -526,7 +534,7 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         txtNombre.requestFocusInWindow();
-        cargarTabla();
+        //cargarTabla();
     }//GEN-LAST:event_formWindowOpened
 
     private void txtDetallesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDetallesKeyPressed
@@ -586,9 +594,14 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
         int returnValue = fileChooser.showOpenDialog(this);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            importarBeneficiariosDesdeArchivo(selectedFile.getAbsolutePath());
+            try {
+                importarBeneficiariosDesdeArchivo(selectedFile.getAbsolutePath());
+                cargarTabla();
+            } catch (Exception e) {
+                // Manejar cualquier excepción que pueda surgir durante la importación
+                JOptionPane.showMessageDialog(this, "Error al importar servicios: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
-        cargarTabla();
     }//GEN-LAST:event_ImportarTxtActionPerformed
 
 
@@ -690,64 +703,64 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void cargarTabla() {
-        // Crear el modelo de la tabla con las columnas que no son editables
-        DefaultTableModel modeloTabla = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; // Todas las celdas no editables
-            }
-        };
+        try {
+            // Crear el modelo de la tabla con las columnas que no son editables
+            DefaultTableModel modeloTabla = new DefaultTableModel() {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false; // Todas las celdas no editables
+                }
+            };
 
-        // Establecer los nombres de las columnas
-        String titulos[] = {"Id", "Nombre", "Edad", "Discapacidad", "Detalles"};
-        modeloTabla.setColumnIdentifiers(titulos);
+            // Establecer los nombres de las columnas
+            String titulos[] = {"Id", "Nombre", "Edad", "Discapacidad", "Detalles"};
+            modeloTabla.setColumnIdentifiers(titulos);
 
-        // Cargar los datos desde la base de datos o la fuente de datos
-        List<Beneficiario> listarBeneficiarios = control.traerBeneficiarios();
+            // Cargar los datos desde la base de datos o la fuente de datos
+            List<Beneficiario> listarBeneficiarios = control.traerBeneficiarios();
 
-        // Verificar si hay datos que cargar
-        if (listarBeneficiarios != null) {
-            for (Beneficiario ben : listarBeneficiarios) {
-                // Añadir cada beneficiario al modelo de la tabla
-                Object[] objeto = {ben.getId(), ben.getNombre(), ben.getEdad(), ben.getDiscapacidades(), ben.getDetallesAdicionales()};
-                modeloTabla.addRow(objeto);
-            }
-        }
-
-        // Asignar el modelo a la tabla
-        tablaBen.setModel(modeloTabla);
-        // Evitar que las columnas se reordenen
-        tablaBen.getTableHeader().setReorderingAllowed(false);
-
-        // Evitar que las columnas se redimensionen
-        tablaBen.getTableHeader().setResizingAllowed(false);
-        
-
-        // Configurar el TableRowSorter para habilitar la funcionalidad de filtrar y ordenar
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modeloTabla);
-        tablaBen.setRowSorter(sorter);
-
-        // Ajustar el ancho de las columnas de la tabla si es necesario
-        ajustarAnchoColumnas(tablaBen);
-        centrarColumnas(tablaBen, new int[]{0});
-        centrarColumnas(tablaBen, new int[]{2});
-
-        // Configuración de filtrado mediante el campo de texto (buscarTxt)
-        buscarTxt.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                String text = buscarTxt.getText();
-                if (text.trim().length() == 0) {
-                    // Si el campo está vacío, no aplicar ningún filtro
-                    sorter.setRowFilter(null);
-                    btnElimianr.setEnabled(true);
-                } else {
-                    // Aplicar el filtro (insensible a mayúsculas/minúsculas)
-                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
-                    btnElimianr.setEnabled(false); // Deshabilitar el botón eliminar mientras se filtra
+            // Verificar si hay datos que cargar
+            if (listarBeneficiarios != null) {
+                for (Beneficiario ben : listarBeneficiarios) {
+                    // Añadir cada beneficiario al modelo de la tabla
+                    Object[] objeto = {ben.getId(), ben.getNombre(), ben.getEdad(), ben.getDiscapacidades(), ben.getDetallesAdicionales()};
+                    modeloTabla.addRow(objeto);
                 }
             }
-        });
+
+            // Asignar el modelo a la tabla
+            tablaBen.setModel(modeloTabla);
+            // Evitar que las columnas se reordenen
+            tablaBen.getTableHeader().setReorderingAllowed(false);
+
+            // Evitar que las columnas se redimensionen
+            tablaBen.getTableHeader().setResizingAllowed(false);
+
+            // Configurar el TableRowSorter para habilitar la funcionalidad de filtrar y ordenar
+            TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modeloTabla);
+            tablaBen.setRowSorter(sorter);
+
+            // Ajustar el ancho de las columnas de la tabla si es necesario
+            ajustarAnchoColumnas(tablaBen);
+            centrarColumnas(tablaBen, new int[]{0});
+            centrarColumnas(tablaBen, new int[]{2});
+
+            // Configuración de filtrado mediante el campo de texto (buscarTxt)
+            buscarTxt.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyReleased(KeyEvent e) {
+                    String text = buscarTxt.getText();
+                    if (text.trim().length() == 0) {
+                        // Si el campo está vacío, no aplicar ningún filtro
+                        sorter.setRowFilter(null);
+                        btnElimianr.setEnabled(true);
+                    } else {
+                        // Aplicar el filtro (insensible a mayúsculas/minúsculas)
+                        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                        btnElimianr.setEnabled(false); // Deshabilitar el botón eliminar mientras se filtra
+                    }
+                }
+            });
 
         // Focus listener para limpiar el filtro cuando el campo de búsqueda pierde el foco
         buscarTxt.addFocusListener(new FocusAdapter() {
@@ -759,8 +772,13 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
             }
         });
 
-     
-        
+    } catch (Exception e) {
+        // Si hay un error al cargar los datos, se ejecutará este bloque
+        JOptionPane.showMessageDialog(this, 
+            "Error al cargar los datos: " + e.getMessage(), 
+            "Error de Carga", 
+            JOptionPane.ERROR_MESSAGE);
+    }    
     }
     
     public void mostrarMensaje(String mensaje, String tipo, String titulo){

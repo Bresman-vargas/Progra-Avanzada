@@ -47,7 +47,7 @@ public class MenuServicios extends javax.swing.JFrame {
     private static final Color ACCENT_COLOR_BLACK = new Color(255,216,102);
     private static final Color FOREGROUND_COLOR_LIGHT = Color.WHITE;
     private static final Color FOREGROUND_COLOR_BLACK = new Color(34,31,34);
-    Controladora control = new Controladora();
+    Controladora control;
     Beneficiario beneficiario;
     Servicio servicio;
     /**
@@ -57,10 +57,19 @@ public class MenuServicios extends javax.swing.JFrame {
         initComponents();
         setResizable(false);
         
-        cargarTabla();
-        cargarTablaBeneficiario();
-        cargarTablaServicios();
-        cargarRelacionesEnTabla();
+        try {
+            control = new Controladora(); // Inicializar Controladora
+            cargarTabla();
+            cargarTablaBeneficiario();
+            cargarTablaServicios();
+            cargarRelacionesEnTabla(); // Cargar tabla solo si Controladora se inicializa correctamente
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                "Error al inicializar la controladora: " + e.getMessage(),
+                "Error de Inicialización",
+                JOptionPane.ERROR_MESSAGE);
+        }
+        
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -440,11 +449,16 @@ public class MenuServicios extends javax.swing.JFrame {
     
     
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        txtServicio.requestFocusInWindow();
-        cargarTabla();
-        cargarTablaBeneficiario();
-        cargarTablaServicios();
-        cargarRelacionesEnTabla();
+        try {
+            txtServicio.requestFocusInWindow();
+            cargarTabla(); // Cargar tabla de servicios
+            cargarTablaBeneficiario(); // Cargar tabla de beneficiarios
+            cargarTablaServicios(); // Cargar tabla de servicios
+            cargarRelacionesEnTabla(); // Cargar relaciones en tabla
+        } catch (Exception e) {
+            // Manejar cualquier excepción que pueda surgir al cargar las tablas
+            JOptionPane.showMessageDialog(this, "Error al cargar datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_formWindowOpened
 
     private void irAtrasBenMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_irAtrasBenMouseClicked
@@ -799,9 +813,15 @@ public class MenuServicios extends javax.swing.JFrame {
         int returnValue = fileChooser.showOpenDialog(this);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            importarServiciosDesdeArchivo(selectedFile.getAbsolutePath());
+            try {
+                importarServiciosDesdeArchivo(selectedFile.getAbsolutePath());
+                cargarTabla();
+            } catch (Exception e) {
+                // Manejar cualquier excepción que pueda surgir durante la importación
+                JOptionPane.showMessageDialog(this, "Error al importar servicios: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
-        cargarTabla();
+        
     }//GEN-LAST:event_importarTxtActionPerformed
   
     

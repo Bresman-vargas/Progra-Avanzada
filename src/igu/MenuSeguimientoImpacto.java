@@ -36,7 +36,7 @@ import logica.Servicio;
 public class MenuSeguimientoImpacto extends javax.swing.JFrame {
 
     Asignacion asignacion;
-    Controladora control = new Controladora();
+    Controladora control;
     
     
     private static final Color ACCENT_COLOR_LIGHT = new Color(50, 35, 62);
@@ -48,8 +48,17 @@ public class MenuSeguimientoImpacto extends javax.swing.JFrame {
      */
     public MenuSeguimientoImpacto() {
         initComponents();
-        cargarRelacionesEnTabla();
         setResizable(false);
+        
+        try {
+            control = new Controladora(); // Inicializar Controladora
+            cargarRelacionesEnTabla(); // Cargar tabla solo si Controladora se inicializa correctamente
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                "Error al inicializar la controladora: " + e.getMessage(),
+                "Error de Inicialización",
+                JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -213,7 +222,7 @@ public class MenuSeguimientoImpacto extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 200, 140, 20));
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 180, 140, 40));
 
         btnBorrarAsig.setText("Borrar");
         btnBorrarAsig.addActionListener(new java.awt.event.ActionListener() {
