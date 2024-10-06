@@ -1,7 +1,7 @@
 package SistemaDiscapacidad;
 
 import com.formdev.flatlaf.IntelliJTheme;
-import igu.Principal;
+import vista.Principal;
 import java.awt.Color;
 import javax.swing.UIManager;
 
@@ -26,5 +26,6 @@ public class SistemaDiscapacidad {
             principal.setVisible(true); // Hacer visible la ventana
         });
     }
+    
 }
 

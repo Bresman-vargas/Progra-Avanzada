@@ -1,4 +1,4 @@
-package persistencia;
+package controladora;
 import javax.persistence.*;
 import java.util.List;
 import logica.Asignacion;

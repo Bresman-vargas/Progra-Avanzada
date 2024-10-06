@@ -1,4 +1,4 @@
-package persistencia.exceptions;
+package controladora.exceptions;
 
 public class NonexistentEntityException extends Exception {
     public NonexistentEntityException(String message, Throwable cause) {

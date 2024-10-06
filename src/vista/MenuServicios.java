@@ -1,4 +1,4 @@
-package igu;
+package vista;
 
 import ExportarTxt.ExportarTxt;
 import com.formdev.flatlaf.FlatLightLaf;

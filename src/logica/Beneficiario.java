@@ -95,6 +95,7 @@ public class Beneficiario implements Serializable {
     public String toString() {
         return nombre + " (Edad: " + edad + ")"; // Cambia esto si deseas más información
     }
+    
 }
 
 

@@ -1,5 +1,5 @@
 package logica;
-import persistencia.ControladoraPersistencia;
+import controladora.ControladoraPersistencia;
 import java.util.List;
 
 

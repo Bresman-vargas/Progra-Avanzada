@@ -1,4 +1,4 @@
-package persistencia;
+package controladora;
 import java.util.List;
 import logica.Asignacion;
 import logica.Beneficiario;

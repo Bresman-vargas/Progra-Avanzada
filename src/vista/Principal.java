@@ -1,4 +1,4 @@
-package igu;
+package vista;
 
 import javax.swing.UIManager;
 
@@ -102,7 +102,7 @@ public class Principal extends javax.swing.JFrame {
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, 80, 20));
 
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/igu/img/Imagen.jpg-2023-12-12T152316.410.jpg"))); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/img/Imagen.jpg-2023-12-12T152316.410.jpg"))); // NOI18N
         jLabel5.setText("jLabel5");
         jLabel5.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(425, 10, 425, 490));
