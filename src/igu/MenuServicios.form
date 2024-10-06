@@ -345,7 +345,7 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="reporteExel1">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Descargar"/>
+                    <Property name="text" type="java.lang.String" value="Exportar"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reporteExel1ActionPerformed"/>
@@ -353,6 +353,19 @@
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                       <AbsoluteConstraints x="30" y="180" width="140" height="-1"/>
+                    </Constraint>
+                  </Constraints>
+                </Component>
+                <Component class="javax.swing.JButton" name="importarTxt">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Importar"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="importarTxtActionPerformed"/>
+                  </Events>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                      <AbsoluteConstraints x="180" y="180" width="140" height="-1"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -654,14 +667,14 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="reporteExel">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Descargar"/>
+                    <Property name="text" type="java.lang.String" value="Exportar"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reporteExelActionPerformed"/>
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="30" y="100" width="160" height="30"/>
+                      <AbsoluteConstraints x="30" y="110" width="160" height="-1"/>
                     </Constraint>
                   </Constraints>
                 </Component>

@@ -7,11 +7,18 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
@@ -22,6 +29,7 @@ import javax.swing.table.DefaultTableModel;
 import logica.Beneficiario;
 import logica.Controladora; 
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableRowSorter;
 import logica.Asignacion;
 
@@ -75,6 +83,7 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
         buscarTxt = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         reporteExel1 = new javax.swing.JButton();
+        ImportarTxt = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menú Beneficiarios");
@@ -253,13 +262,21 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
         jLabel3.setText("Buscar:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 320, 60, 25));
 
-        reporteExel1.setText("Descargar");
+        reporteExel1.setText("Exportar");
         reporteExel1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 reporteExel1ActionPerformed(evt);
             }
         });
         jPanel1.add(reporteExel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 130, -1));
+
+        ImportarTxt.setText("Importar");
+        ImportarTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ImportarTxtActionPerformed(evt);
+            }
+        });
+        jPanel1.add(ImportarTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 320, 120, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -562,7 +579,81 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_reporteExel1ActionPerformed
 
+    private void ImportarTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImportarTxtActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos de texto (*.txt)", "txt"));
 
+        int returnValue = fileChooser.showOpenDialog(this);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            importarBeneficiariosDesdeArchivo(selectedFile.getAbsolutePath());
+        }
+        cargarTabla();
+    }//GEN-LAST:event_ImportarTxtActionPerformed
+
+
+    // Método para importar beneficiarios desde un archivo
+    private void importarBeneficiariosDesdeArchivo(String nombreArchivo) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("SistemaDiscapacidadPU");
+        EntityManager em = emf.createEntityManager();
+
+        int beneficiariosAgregados = 0; // Contador de beneficiarios agregados
+
+        try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
+            String line;
+            em.getTransaction().begin();
+
+            while ((line = br.readLine()) != null) {
+                if (line.isEmpty()) continue;
+
+                // Dividir la línea en partes usando el separador ";"
+                String[] partes = line.split(";", -1); // -1 para incluir partes vacías si hay
+
+                // Verificar que haya exactamente 4 partes
+                if (partes.length == 4) {
+                    String nombre = partes[0].trim(); // Nombre del beneficiario
+                    int edad;
+                    try {
+                        edad = Integer.parseInt(partes[1].trim()); // Edad del beneficiario
+                    } catch (NumberFormatException e) {
+                        // Ignorar la línea si la edad es inválida y continuar
+                        continue; 
+                    }
+
+                    // Extraer discapacidades y limpiar formato
+                    String discapacidadesStr = partes[2].trim(); // [Discapacidad Motriz]
+                    String detallesAdicionales = partes[3].trim(); // Detalles adicionales
+
+                    // Eliminar corchetes y dividir las discapacidades
+                    discapacidadesStr = discapacidadesStr.replace("[", "").replace("]", "");
+                    String[] discapacidadesArray = discapacidadesStr.split(","); // Separar discapacidades por coma
+                    List<String> discapacidades = Arrays.asList(discapacidadesArray);
+
+                    // Crear un nuevo beneficiario y persistirlo
+                    Beneficiario beneficiario = new Beneficiario(nombre, edad, discapacidades, detallesAdicionales);
+                    em.persist(beneficiario);
+                    beneficiariosAgregados++; // Incrementar el contador
+                } else {
+                    // Puedes registrar los errores de formato en el log o consola
+                    System.out.println("Formato incorrecto: " + line);
+                }
+            }
+
+            em.getTransaction().commit();
+
+            // Mostrar un mensaje al final indicando cuántos beneficiarios fueron agregados
+            if (beneficiariosAgregados > 0) {
+                JOptionPane.showMessageDialog(this, beneficiariosAgregados + " beneficiario(s) agregado(s) exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se agregaron beneficiarios.", "Información", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error al leer el archivo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
 
     
     /**
@@ -571,6 +662,7 @@ public class MenuBeneficiarios extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ImportarTxt;
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnElimianr;

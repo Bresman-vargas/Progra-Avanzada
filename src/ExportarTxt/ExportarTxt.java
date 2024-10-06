@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ExportarTxt;
 
 import java.io.BufferedWriter;
@@ -37,18 +32,18 @@ public class ExportarTxt {
             
             // Crear archivo de texto
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(new File(ruta)))) {
-                
-                // Escribir encabezados (nombres de las columnas)
-                for (int c = 0; c < tabla.getColumnCount(); c++) {
-                    bw.write(tabla.getColumnName(c) + "\t");  // Los nombres de las columnas separados por tabulador
-                }
-                bw.newLine();  // Nueva línea después de los encabezados
 
                 // Escribir filas de datos
                 for (int f = 0; f < tabla.getRowCount(); f++) {
-                    for (int c = 0; c < tabla.getColumnCount(); c++) {
-                        bw.write(String.valueOf(tabla.getValueAt(f, c)) + "\t");  // Los datos separados por tabulador
+                    // Obtener los datos de la fila sin el ID
+                    StringBuilder linea = new StringBuilder();
+                    for (int c = 1; c < tabla.getColumnCount(); c++) { // Comenzar desde 1 para omitir el ID
+                        linea.append(String.valueOf(tabla.getValueAt(f, c)));  // Los datos
+                        if (c < tabla.getColumnCount() - 1) { // Evitar el último ;
+                            linea.append(";");
+                        }
                     }
+                    bw.write(linea.toString());  // Escribir la línea completa
                     bw.newLine();  // Nueva línea después de cada fila
                 }
 
@@ -60,4 +55,3 @@ public class ExportarTxt {
         }
     }
 }
-

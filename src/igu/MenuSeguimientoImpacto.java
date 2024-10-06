@@ -207,13 +207,13 @@ public class MenuSeguimientoImpacto extends javax.swing.JFrame {
         });
         jPanel1.add(btnTheme, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 40, -1, -1));
 
-        jButton2.setText("Descargar");
+        jButton2.setText("Exportar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 180, 140, 40));
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 200, 140, 20));
 
         btnBorrarAsig.setText("Borrar");
         btnBorrarAsig.addActionListener(new java.awt.event.ActionListener() {
@@ -547,10 +547,12 @@ public class MenuSeguimientoImpacto extends javax.swing.JFrame {
 
     ajustarAnchoColumnas(tablaImpacto);
     centrarColumnas(tablaImpacto, new int[]{0, 3, 5});
+    
+    tablaImpacto.getColumnModel().getColumn(3).setPreferredWidth(50);
 
     // Asignar el renderizador de barra de progreso a la columna de Progreso (índice 5)
     tablaImpacto.getColumnModel().getColumn(5).setCellRenderer(new ProgressBarRenderer());
-
+    tablaImpacto.getColumnModel().getColumn(5).setPreferredWidth(150);  
     // Filtrado de texto
     BuscarTxt.addKeyListener(new KeyAdapter() {
         @Override

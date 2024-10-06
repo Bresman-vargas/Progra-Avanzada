@@ -10,15 +10,23 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
@@ -29,6 +37,7 @@ import javax.swing.table.DefaultTableModel;
 import logica.Controladora;
 import logica.Servicio;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableRowSorter;
 import logica.Beneficiario;
 import logica.Asignacion;
@@ -85,6 +94,7 @@ public class MenuServicios extends javax.swing.JFrame {
         buscarTxt = new javax.swing.JTextField();
         btnLimpiar = new javax.swing.JButton();
         reporteExel1 = new javax.swing.JButton();
+        importarTxt = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaBenAsig = new javax.swing.JTable();
@@ -248,13 +258,21 @@ public class MenuServicios extends javax.swing.JFrame {
         btnLimpiar.setFocusable(false);
         jPanel3.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 90, 40));
 
-        reporteExel1.setText("Descargar");
+        reporteExel1.setText("Exportar");
         reporteExel1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 reporteExel1ActionPerformed(evt);
             }
         });
         jPanel3.add(reporteExel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 140, -1));
+
+        importarTxt.setText("Importar");
+        importarTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                importarTxtActionPerformed(evt);
+            }
+        });
+        jPanel3.add(importarTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 180, 140, -1));
 
         jTabbedPane1.addTab("Añadir Nuevo Servicio", jPanel3);
 
@@ -384,13 +402,13 @@ public class MenuServicios extends javax.swing.JFrame {
         jLabel11.setText("Buscar");
         jPanel5.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 110, 51, 20));
 
-        reporteExel.setText("Descargar");
+        reporteExel.setText("Exportar");
         reporteExel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 reporteExelActionPerformed(evt);
             }
         });
-        jPanel5.add(reporteExel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 160, 30));
+        jPanel5.add(reporteExel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 160, -1));
 
         jTabbedPane1.addTab("Servicios Asignados", jPanel5);
 
@@ -774,6 +792,66 @@ public class MenuServicios extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_reporteExel1ActionPerformed
 
+    private void importarTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importarTxtActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos de texto (*.txt)", "txt"));
+
+        int returnValue = fileChooser.showOpenDialog(this);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            importarServiciosDesdeArchivo(selectedFile.getAbsolutePath());
+        }
+        cargarTabla();
+    }//GEN-LAST:event_importarTxtActionPerformed
+  
+    
+    private void importarServiciosDesdeArchivo(String nombreArchivo) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("SistemaDiscapacidadPU");
+        EntityManager em = emf.createEntityManager();
+
+        int serviciosAgregados = 0; // Contador de servicios agregados
+
+        try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
+            String line;
+            em.getTransaction().begin();
+
+            while ((line = br.readLine()) != null) {
+                if (line.isEmpty()) continue;
+
+                // Dividir la línea en partes usando el separador ";"
+                String[] partes = line.split(";", -1); // -1 para incluir partes vacías si hay
+
+                // Verificar que haya exactamente 3 partes
+                if (partes.length == 3) {
+                    String nombreServicio = partes[0].trim(); // Nombre del servicio
+                    String responsable = partes[1].trim(); // Responsable del servicio
+                    String descripcion = partes[2].trim(); // Descripción del servicio
+
+                    // Crear un nuevo servicio y persistirlo
+                    Servicio servicio = new Servicio(nombreServicio, responsable, descripcion);
+                    em.persist(servicio);
+                    serviciosAgregados++; // Incrementar el contador
+                } else {
+                    // Puedes registrar los errores de formato en el log o consola
+                    System.out.println("Formato incorrecto: " + line);
+                }
+            }
+
+            em.getTransaction().commit();
+
+            // Mostrar un mensaje al final indicando cuántos servicios fueron agregados
+            if (serviciosAgregados > 0) {
+                JOptionPane.showMessageDialog(this, serviciosAgregados + " servicio(s) agregado(s) exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se agregaron servicios.", "Información", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error al leer el archivo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
     
     /**
      * @param args the command line arguments
@@ -792,6 +870,7 @@ public class MenuServicios extends javax.swing.JFrame {
     private javax.swing.JTextField buscarBen;
     private javax.swing.JTextField buscarSer;
     private javax.swing.JTextField buscarTxt;
+    private javax.swing.JButton importarTxt;
     private javax.swing.JLabel irAtrasBen;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1133,6 +1212,7 @@ public class MenuServicios extends javax.swing.JFrame {
 
         ajustarAnchoColumnas(tablaAsig);
         centrarColumnas(tablaAsig, new int[]{0, 3, 5});
+        tablaAsig.getColumnModel().getColumn(3).setPreferredWidth(50);
 
         // Filtrado de texto
         BuscarAsig.addKeyListener(new KeyAdapter() {
